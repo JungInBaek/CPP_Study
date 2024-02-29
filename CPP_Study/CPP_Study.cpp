@@ -510,9 +510,453 @@ using namespace std;
 
 #pragma region 파일 분활 관리
 
-#include "Test1.h"
+//#include "Test1.h"
 
 #pragma endregion
+
+#pragma region 객체지향 시작
+
+// 객체란? 플레이어, 몬스터, 게임룸
+
+// Knight를 설계해보자
+// - 속성(데이터): hp, attack, x, y
+// - 기능(동작): Move, Attack, Die
+
+// class는 일종의 설계도
+//class Knight
+//{
+//public:
+//    // 멤버 함수 선언
+//    void Move(int x, int y);
+//    void Attack();
+//    void Die()
+//    {
+//        _hp = 0;
+//        cout << "Die" << endl;
+//    }
+//
+//public:
+//    // 멤버 변수
+//    int _hp;
+//    int _attack;
+//    int _posX;
+//    int _posY;
+//
+//};
+//
+//void Knight::Move(int x, int y)
+//{
+//    _posX = x;
+//    _posY = y;
+//    cout << "Move" << endl;
+//}
+//
+//void Knight::Attack()
+//{
+//    cout << "Attack : " << _attack << endl;
+//}
+
+#pragma endregion
+
+#pragma region 생성자와 소멸자
+
+// 생성자(Constructor)와 소멸자(Destructor)
+// 클래스에 '소속'된 함수들을 멤버 함수라고 함
+// 이 중에서 [시작]과 [끝]을 알리는 특별한 함수 2종이 있다
+// 시작(생성) -> 생성자(여러개 존재 가능)
+// 끝(소멸) -> 소멸자(오직 1개만)
+
+// 암시적(Implicit) 생성자
+// 생성자를 명시적으로 만들지 않으면,
+// 아무 인자도 받지 않는 [기본 생성자]가 컴파일러에 의해 자동으로 만들어짐
+// 그러나 명시적(Explict)으로 아무 생성자를 하나 만들면,
+// 자동으로 만들어지던 [기본 생성자]는 더 이상 만들어지지 않음!
+
+//class Knight
+//{
+//public:
+//    // [1] 기본 생성자 (인자가 없음)
+//    Knight()
+//    {
+//        cout << "Knight() 기본 생성자 호출" << endl;
+//        _hp = 100;
+//        _attack = 10;
+//        _posX = 0;
+//        _posY = 0;
+//    }
+//
+//    // [2] 복사 생성자 (자기 자신의 클래스 참조 타입을 인자로 받음)
+//    // 일반적으로 '똑같은' 데이터를 지닌 객체가 생성되길 기대한다
+//    // 명시적으로 복사 생성자를 만들지 않을 경우 컴파일러가 자동으로 복사 생성자를 만들어준다
+//    /*Knight(const Knight& knight)
+//    {
+//        _hp = knight._hp;
+//        _attack = knight._attack;
+//        _posX = knight._posX;
+//        _posY = knight._posY;
+//    }*/
+//    
+//    // [3] 기타 생성자
+//    // 생성자 오버로딩
+//    // 이 중에서 인자를 1개만 받는 [기타 생성자]를 [타입 변환 생성자]라고 부르기도 함
+//    // 암시적으로 타입 변환을 한다
+//    // 명시적인 용도로만 사용할 것: explicit
+//    explicit Knight(int hp)
+//    {
+//        cout << "Knight(int) 기타 생성자 호출" << endl;
+//        _hp = hp;
+//        _attack = 10;
+//        _posX = 0;
+//        _posY = 0;
+//    }
+//
+//    Knight(int hp, int attack, int posX, int posY)
+//    {
+//        _hp = hp;
+//        _attack = attack;
+//        _posX = posX;
+//        _posY = posY;
+//    }
+//
+//    // 소멸자
+//    ~Knight()
+//    {
+//        cout << "~Knight() 소멸자 호출" << endl;
+//    }
+//
+//    void Move(int x, int y);
+//    void Attack();
+//    void Die()
+//    {
+//        _hp = 0;
+//        cout << "Die" << endl;
+//    }
+//
+//public:
+//    int _hp;
+//    int _attack;
+//    int _posX;
+//    int _posY;
+//
+//};
+//
+//void Knight::Move(int x, int y)
+//{
+//    _posX = x;
+//    _posY = y;
+//    cout << "Move" << endl;
+//}
+//
+//void Knight::Attack()
+//{
+//    cout << "Attack : " << _attack << endl;
+//}
+//
+//void HelloKnight(Knight k)
+//{
+//    cout << "Hello Knight" << endl;
+//}
+
+#pragma endregion
+
+#pragma region 상속성
+
+// 객체지향 (OOP: Object Oriented Programming)
+// - 상속성
+// - 은닉성
+// - 다형성
+
+// 상속(Inheritance) ? 부모 -> 자식에게 유산을 물려주는 것
+// 생성자(N) / 소멸자(1)
+// - Knight를 생성하면 Player() 생성자 호출 후 -> Knight() 생성자 호출
+
+// 게임 개발 상속 사용 예
+// GameObject
+// - Creature
+// -- Player, Monster, NPC, Pet
+// - Projectile
+// -- Arrow, Fireball
+// - Environment
+
+// Item
+// - Weapon
+// -- Sword, Bow
+// - Armor
+// -- Helmet, Boots, Armor
+// - Consumable
+// -- Potion, Scroll
+
+//class GameObject
+//{
+//public:
+//    int _objectId;
+//};
+//
+//class Player : public GameObject
+//{
+//public:
+//    Player()
+//    {
+//        _hp = 0;
+//        _attack = 0;
+//        _defence = 0;
+//        cout << "Player() 기본 생성자 호출" << endl;
+//    }
+//
+//    Player(int hp)
+//    {
+//        _hp = hp;
+//        _attack = 0;
+//        _defence = 0;
+//        cout << "Player(int hp) 기타 생성자 호출" << endl;
+//    }
+//
+//    ~Player()
+//    {
+//        cout << "~Player() 소멸자 호출" << endl;
+//    }
+//    void Move() { cout << "Player Move 호출" << endl; }
+//    void Attack() { cout << "Player Attack 호출" << endl; }
+//    void Die() { cout << "Player Die 호출" << endl; }
+//
+//public:
+//    int _hp;
+//    int _attack;
+//    int _defence;
+//};
+//
+//class Knight : public Player
+//{
+//public:
+//    Knight()
+//        /*
+//        * 선(먼저) 처리 영역
+//        * - 여기서 Player() 기본 생성자를 호출
+//        */
+//    {
+//        _stamina = 100;
+//        cout << "Knight() 기본 생성자 호출" << endl;
+//    }
+//
+//    Knight(int stamina) : Player(100)
+//        /*
+//        * 선(먼저) 처리 영역
+//        * - 여기서 Player(int hp) 기타 생성자를 호출
+//        */
+//    {
+//        _stamina = stamina;
+//        cout << "Knight(int stamina) 기타 생성자 호출" << endl;
+//    }
+//
+//    ~Knight()
+//    {
+//        cout << "~Knight() 소멸자 호출" << endl;
+//    }
+//    /*
+//    * 후(나중에) 처리 영역
+//    * - 여기서 ~Player() 소멸자를 호출
+//    */
+//
+//    // 재정의
+//    void Move() { cout << "Knight Move 호출" << endl; }
+//public:
+//    int _stamina;
+//};
+//
+//class Mage : public Player
+//{
+//public:
+//    int _mp;
+//};
+
+#pragma endregion
+
+#pragma region 은닉성
+
+// 객체지향 (OOP: Object Oriented Programing)
+// - 상속성
+// - 은닉성 = 캡슐화
+// - 다형성
+
+// 은닉성(Data Hiding) = 캡슐화(Encapsulation)
+// 숨기는 이유?
+// 1) 위험하고 건드리면 안되는 경우
+// 2) 다른 경로로 접근하길 원하는 경우
+
+// 자동차
+// - 핸들
+// - 페달
+// - 엔진
+// - 문
+// - 각종 전기선
+
+// 일반 구매자 입장에서 사용하는 것?
+// - 핸들 / 페달 / 문
+// 몰라도 되는 것 혹은 건드리면 안되는 것?
+// - 엔진, 각종 전기선
+
+// 접근 지정자: public(공개), protected(보호), private(개인)
+// - public: 모든 곳에서 사용 가능
+// - protected: 상속된 클래스들에서만 사용 가능
+// - private: 클래스 내부에서만 사용 가능
+
+// 상속 접근 지정자: 다음 세대에 부모의 유산을 어떻게 물려줄지
+// - public: 부모 클래스의 설계 그대로 상속 (public -> public, protected -> protected)
+// - protected: 부모 클래스의 접근 지정자를 protected로 바꿔서 상속 (public -> protected, protected -> protected)
+// - private: 부모 클래스의 접근 지정자를 private으로 바꿔서 상속 (public -> private, protected -> private)
+
+//class Car
+//{
+//public:     // (멤버) 접근 지정자
+//    void MoveHandle() {}
+//    void PushPedal() {}
+//    void OpenDoor() {}
+//
+//    void TurnKey()
+//    {
+//        // ...
+//        RunEngine();
+//    }
+//
+//protected:
+//    void DisassembleCar() {}    // 차를 분해
+//    void RunEngine() {}         // 엔진을 구동
+//    void ConnectCircuit() {}    // 전기선 연결
+//
+//public:     // (멤버) 접근 지정자
+//    // 핸들
+//    // 페달
+//    // 엔진
+//    // 문
+//    // 각종 전기선
+//};
+//
+//
+//class SuperCar : private Car     // (상속) 접근 지정자
+//{
+//public:
+//    void PushRemoteController()
+//    {
+//        RunEngine();
+//    }
+//};
+//
+//class TestSuperCar : public SuperCar   // (상속) 접근 지정자를 생략하면 부모의 (상속) 접근 지정자를 따라간다
+//{
+//public:
+//    void Test()
+//    {
+//        
+//    }
+//};
+//
+//// 캡슐화
+//// 연관된 데이터와 함수를 논리적으로 묶어놓은 것
+//class Berserker
+//{
+//public:
+//    int GetHp() { return _hp; }
+//    void SetHp(int hp)
+//    {
+//        _hp = hp;
+//        if (_hp <= 50)
+//        {
+//            SetBerserkerMode();
+//        }
+//    }
+//
+//private:
+//    // 체력이 50 이하로 떨어지면 버서커 모드 발동 (강해짐)
+//    void SetBerserkerMode()
+//    {
+//        cout << "매우 강해짐!" << endl;
+//    }
+//
+//private:
+//    int _hp = 100;
+//};
+
+#pragma endregion
+
+#pragma region 다형성
+
+// 다형성(Polymorphism = Poly + morph) = 겉은 같지만 기능이 다르게 동작한다
+// - 오버로딩(Overloading) = 함수 중복 정의 = 함수 이름의 재사용
+// - 오버라이딩(Overriding) = 재정의 = 부모 클래스의 함수를 자식 클래스에서 재정의
+
+// 바인딩(Binding) = 묶는다
+// - 정적 바인딩(Static Binding): 컴파일 시점에 결정
+// - 동적 바인딩(Dynamic Binding): 실행 시점에 결정
+
+// 일반 함수는 정적 바인딩을 사용
+// 동적 바인딩을 원한다면? -> 가상 함수 (Virtual Function)
+
+// 실제 객체가 어떤 타입인지 어떻게 알고 알아서 가상함수를 호출해준걸까?
+// - 가상 함수 테이블 (vftable)
+// .vftable [] 4바이트(32) 8바이트(64)
+
+// 순수 가상 함수: 구현은 없고 '인터페이스'만 전달하는 용도로 사용하고 싶을 경우
+// ex) virtual void VAttack() = 0;
+
+// 추상 클래스: 순수 가상 함수가 1개 이상 포함되면 추상 클래스로 간주한다
+// - 직접적으로 객체를 만들 수 없게 됨
+
+//class Player
+//{
+//public:
+//    Player()
+//    {
+//        _hp = 100;
+//    }
+//
+//    void Move() { cout << "Move Player!" << endl; }
+//    //void Move(int a) { cout << "Move Player (int)!" << endl; }
+//    virtual void VMove() { cout << "VMove Player!" << endl; }
+//    virtual void VDie() { cout << "VDie Player!" << endl; }
+//
+//    // 순수 가상 함수
+//    virtual void VAttack() = 0;
+//
+//public:
+//    int _hp;
+//};
+//
+//class Knight : public Player
+//{
+//public:
+//    Knight()
+//    {
+//        _stamina = 100;
+//    }
+//
+//    void Move() { cout << "Move Knight!" << endl; }
+//    // 가상 함수는 virtual을 생략하고 재정의 하더라도 가상 함수다
+//    virtual void VMove() { cout << "VMove Knight!" << endl; }
+//    virtual void VDie() { cout << "VDie Knight!" << endl; }
+//
+//    virtual void VAttack() { cout << "VAttack Knight!" << endl; }
+//
+//public:
+//    int _stamina;
+//};
+//
+//class Mage : public Player
+//{
+//public:
+//    void Move() { cout << "Move Mage!" << endl; }
+//
+//public:
+//    int _mp;
+//};
+//
+//void MovePlayer(Player* player)
+//{
+//    player->VMove();
+//    player->VDie();
+//}
+
+#pragma endregion
+
 
 
 int main()
@@ -985,8 +1429,98 @@ int main()
 
 #pragma region 파일 분활 관리
 
-    Test_1();
+    //Test_1();
 
+#pragma endregion
+
+#pragma region 객체지향 시작
+    
+    // Instantiate 객체를 만든다
+    /*Knight k1;
+    k1._hp = 100;
+    k1._attack = 10;
+    k1._posX = 0;
+    k1._posY = 0;
+
+    Knight k2;
+    k2._hp = 80;
+    k2._attack = 5;
+    k2._posX = 1;
+    k2._posY = 1;
+
+    k1.Move(2, 2);
+    k1.Attack();
+    k1.Die();*/
+    
+#pragma endregion
+
+#pragma region 생성자와 소멸자
+
+    //// [3] 기타 생성자
+    //Knight k1(100, 10 , 0, 0);
+    ////k1._hp = 100;
+    //k1._attack = 10;
+    //k1._posX = 0;
+    //k1._posY = 0;
+
+    //// [2] 복사 생성자
+    //Knight k2(k1);
+    //Knight k3 = k1;
+
+    //Knight k4;  // 기본 생성자
+    //k4 = k1;    // 복사
+
+    //k1.Move(2, 2);
+    //k1.Attack();
+    //k1.Die();
+
+    //// 암시적 형변환 -> 컴파일러가 알아서 바꿔치기
+    //int num = 1;
+    //float f = (float) num;  // 명시적
+    //double d = num;         // 암시적
+
+    //Knight k5;
+    //k5 = (Knight)1;         // 명시적
+
+    //HelloKnight((Knight)5);
+
+#pragma endregion
+
+#pragma region 상속성
+    
+    /*Knight k(100);
+    k._hp = 100;
+    k._attack = 10;
+    k._defence = 5;*/
+    //k._stamina = 50;
+
+    /*k.Move();
+    k.Player::Move();
+    k.Attack();
+    k.Die();*/
+    
+#pragma endregion
+
+#pragma region 은닉성
+
+    //Car car;
+    
+    /*Berserker b;
+    b.SetHp(20);
+
+    TestSuperCar car;
+    car.PushRemoteController();*/
+
+#pragma endregion
+
+#pragma region 다형성
+    
+    /*Player p;
+    p.Move();*/
+    
+    /*Knight k;
+    MovePlayer(&k);*/
+    
 #pragma endregion
 
 }
