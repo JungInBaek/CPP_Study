@@ -957,6 +957,236 @@ using namespace std;
 
 #pragma endregion
 
+#pragma region 초기화 리스트
+
+// 초기화 해야하는 경우?
+// - 포인터 등 주소값이 연관되어 있을 경우
+// - 버그 예방
+
+// 멤버 변수 초기화는 다양한 문법이 존재한다
+// - 생성자 내에서 초기화
+// - 초기화 리스트
+// - C++11 문법
+
+// 초기화 리스트
+// - 상속 관계에서 원하는 부모 생성자를 호출할 때 필요하다
+// - 생성자 내에서 초기화 vs 초기화 리스트
+// -- 일반 변수는 별 차이 없음
+// -- 멤버 타입이 클래스인 경우 차이가 난다
+
+
+//class Inventory
+//{
+//public:
+//    Inventory() { cout << "Inventory()" << endl; }
+//    Inventory(int size) { cout << "Inventory(int size)" << endl; _size = size; }
+//    ~Inventory() { cout << "~Inventory" << endl; }
+//
+//public:
+//    int _size = 10;
+//};
+//
+//class Player
+//{
+//public:
+//    Player() {}
+//    Player(int id) {}
+//};
+
+// Is-A (Knight Is-A Player? 기사는 플레이어인가?) YES -> 상속관계
+// Has-A (Knight Has-A Inventory? 기사는 인벤토리를 갖고 있는가?) YES -> 포함관계
+
+//class Knight : public Player
+//{
+//public:
+//    // 참조 타입과 const 변수도 초기화 리스트를 활용하여 초기화 해주어야 한다
+//    Knight() : Player(1), _hp(100), _inventory(20), _hpRef(_hp), _hpConst(100)
+//        /*
+//        * 선처리 영역
+//        * - 부모 클래스의 생성자를 명시적으로 호출하지 않아도 선처리 영역에서 부모 클래스의 기본 생성자를 간접적으로 호출
+//        * - 포함관계의 클래스를 멤버 변수로 가지고 있다면 선처러 영역에서 해당 클래스의 기본 생성자를 간접적으로 호출
+//        */
+//    {
+//        _hp = 100;
+//        //_inventory = Inventory(20);   // 생성자 내부 초기화는 선처리 영역에서 기본 생성자로 객체를 한번 먼저 생성한 후 초기화하므로 성능적으로 문제가 있다
+//    }
+//
+//public:
+//    int _hp;    // 쓰레기 값
+//    Inventory _inventory;
+//
+//    int& _hpRef;
+//    const int _hpConst;
+//};
+
+#pragma endregion
+
+#pragma region 연산자 오버로딩
+
+// 연산자 vs 함수
+// - 연산자는 피연산자의 개수/타입이 고정되어 있음
+
+// 연산자 오버로딩?
+// - [연산자 함수]를 정의해야 함
+// 함수도 멤버함수, 전역함수가 존재하는 것처럼 연산자 함수도 두가지 방식으로 만들 수 있음
+
+// - 멤버 연산자 함수
+// -- a operator b 형태에서 왼쪽을 기준으로 실행됨 (a가 클래스여야 연산 가능. a를 '기준 피연산자'라고 함)
+// -- 한계) a가 클래스가 아니면 사용 못함
+
+// - 전역 연산자 함수
+// -- a operation b 형태라면 a, b 모두를 연산자 함수의 피연산자로 만들어준다
+
+// 둘 중 하나만 지원하는 경우도 있다
+// - 대표적으로 대입 연산자 (a = b)는 전역 연산자로는 만들 수 없다
+
+// 복사 대입 연산자
+// [복사 생성자] [대입 연산자] [복사 대입 연산자]
+
+// - 모든 연산자를 다 오버로딩 할 수 있는 것은 아니다 (::, ., .* 등)
+// 모든 연산자가 다 2개 항이 있는 것은 아니다 (++, -- 가 대표적, 단항 연산자)
+// - 증감 연산자 ++, --
+// -- 전위형 (++a) = operator++()
+// -- 후위형 (a++) = operator++(int)
+
+//class Position
+//{
+//public:
+//    Position operator+(const Position& arg)
+//    {
+//        Position pos;
+//        pos._x = _x + arg._x;
+//        pos._y = _y + arg._y;
+//
+//        return pos;
+//    }
+//
+//    Position operator+(int arg)
+//    {
+//        Position pos;
+//        pos._x = _x + arg;
+//        pos._y = _y + arg;
+//
+//        return pos;
+//    }
+//
+//    bool operator==(const Position& arg)
+//    {
+//        return _x == arg._x && _y == arg._y;
+//    }
+//
+//    Position& operator=(int arg)
+//    {
+//        _x = arg;
+//        _y = arg;
+//        return *this;
+//    }
+//
+//    // [복사 생성자] [복사 대입 연산자]
+//    // 말 그대로 객체가 '복사'되길 원하는 특징
+//    // 생략할 경우 컴파일러가 자동 생성
+//    Position& operator=(const Position& arg)
+//    {
+//        _x = arg._x;
+//        _y = arg._y;
+//        return *this;
+//    }
+//
+//    Position& operator++()
+//    {
+//        ++_x;
+//        ++_y;
+//        return *this;
+//    }
+//    
+//    Position operator++(int)
+//    {
+//        Position ret = *this;
+//        ++_x;
+//        ++_y;
+//        return ret;
+//    }
+//
+//public:
+//    int _x;
+//    int _y;
+//};
+//
+//// 전역 연산자 함수
+//Position operator+(int a, const Position& b)
+//{
+//    Position pos;
+//    pos._x = b._x + a;
+//    pos._y = b._y + a;
+//    return pos;
+//}
+
+
+#pragma endregion
+
+#pragma region 객체지향 마무리
+    
+// 1) struct vs class
+// C++에서 struct와 class는 종이 한장 차이
+// struct는 기본 접근 지정자가 public이고, class는 private이다
+// -> C++은 C에서 파생되었고, 호환성을 지키기 위함이다
+// -> struct는 그냥 구조체(데이터 묶음)을 표현하는 용도
+// -> class는 객체 지향 프로그래밍의 특징을 나타내는 용도
+
+struct TestStruct
+{
+    int _a;
+    int _b;
+};
+
+class TestClass
+{
+    int _a;
+    int _b;
+};
+
+// 2) static 변수, static 함수 (static = 정적 = 고정된)
+class Marine
+{
+public:
+    int _hp;
+    static int s_attack;
+
+    void TakeDamage(int damage)
+    {
+        _hp -= damage;
+    }
+
+    static void SetAttack()
+    {
+        s_attack = 100;
+    }
+};
+
+
+// static 변수 메모리 영역
+// 초기화 하면 .data 영역
+// 초기화 하지 않으면 .bss 영역
+int Marine::s_attack = 0;
+
+
+class Player
+{
+public:
+    int _id;
+};
+
+int GenerateId()
+{
+    // 생명주기: 프로그램 시작/종료 (메모리에 항상 올라가 있음)
+    // 가시범위: 함수 내부
+
+    // 정적 지역 객체
+    static int s_id = 1;
+    return s_id++;
+}
+
+#pragma endregion
 
 
 int main()
@@ -1520,6 +1750,69 @@ int main()
     
     /*Knight k;
     MovePlayer(&k);*/
+    
+#pragma endregion
+
+#pragma region 초기화 리스트
+    
+    /*Knight k;
+
+    cout << k._hp << endl;*/
+    
+#pragma endregion
+
+#pragma region 연산자 오버로딩
+    
+    /*Position pos;
+    pos._x = 0;
+    pos._y = 0;
+
+    Position pos2;
+    pos2._x = 1;
+    pos2._y = 1;
+
+    Position pos3 = pos + pos2;
+
+    Position pos4 = 1 + pos3;
+    
+    bool isSame = (pos3 == pos4);
+
+    Position pos5;
+    pos5 = 5;
+    Position pos6 = pos5;
+
+    pos5 = pos6++;
+    ++(++pos6);*/
+    
+#pragma endregion
+
+
+#pragma region 객체지향 마무리
+    
+    Marine::s_attack = 6;
+    Marine m1;
+    m1._hp = 40;
+    m1.TakeDamage(10);
+    //m1.s_attack = 6;
+
+    Marine m2;
+    m2._hp = 40;
+    m2.TakeDamage(5);
+    //m2.s_attack = 6;
+
+    // 마린 공격력 업그레이드!
+    Marine::s_attack = 7;
+    Marine::SetAttack();
+
+    // 스택 영역이 아닌 .data 영역
+    static int id = 10;
+    int a = id;
+
+    cout << GenerateId() << endl;
+    cout << GenerateId() << endl;
+    cout << GenerateId() << endl;
+    cout << GenerateId() << endl;
+    cout << GenerateId() << endl;
     
 #pragma endregion
 
