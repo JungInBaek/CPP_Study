@@ -1133,61 +1133,101 @@ using namespace std;
 // -> struct는 그냥 구조체(데이터 묶음)을 표현하는 용도
 // -> class는 객체 지향 프로그래밍의 특징을 나타내는 용도
 
-struct TestStruct
-{
-    int _a;
-    int _b;
-};
-
-class TestClass
-{
-    int _a;
-    int _b;
-};
-
-// 2) static 변수, static 함수 (static = 정적 = 고정된)
-class Marine
-{
-public:
-    int _hp;
-    static int s_attack;
-
-    void TakeDamage(int damage)
-    {
-        _hp -= damage;
-    }
-
-    static void SetAttack()
-    {
-        s_attack = 100;
-    }
-};
+//struct TestStruct
+//{
+//    int _a;
+//    int _b;
+//};
+//
+//class TestClass
+//{
+//    int _a;
+//    int _b;
+//};
+//
+//// 2) static 변수, static 함수 (static = 정적 = 고정된)
+//class Marine
+//{
+//public:
+//    int _hp;
+//    static int s_attack;
+//
+//    void TakeDamage(int damage)
+//    {
+//        _hp -= damage;
+//    }
+//
+//    static void SetAttack()
+//    {
+//        s_attack = 100;
+//    }
+//};
 
 
 // static 변수 메모리 영역
 // 초기화 하면 .data 영역
 // 초기화 하지 않으면 .bss 영역
-int Marine::s_attack = 0;
+//int Marine::s_attack = 0;
 
 
-class Player
-{
-public:
-    int _id;
-};
-
-int GenerateId()
-{
-    // 생명주기: 프로그램 시작/종료 (메모리에 항상 올라가 있음)
-    // 가시범위: 함수 내부
-
-    // 정적 지역 객체
-    static int s_id = 1;
-    return s_id++;
-}
+//class Player
+//{
+//public:
+//    int _id;
+//};
+//
+//int GenerateId()
+//{
+//    // 생명주기: 프로그램 시작/종료 (메모리에 항상 올라가 있음)
+//    // 가시범위: 함수 내부
+//
+//    // 정적 지역 객체
+//    /*static int s_id = 1;
+//    return s_id++;*/
+//}
 
 #pragma endregion
 
+#pragma region 동적할당
+
+// 메모리 구조 복습
+// - 실행할 코드가 저장되는 영역 -> 코드 영역
+// - 전역(global)/정적(static) 변수 -> 데이터 영역
+// - 지역(local)/매개(parameter) 변수 -> 스택 영역
+// - 동적 할당 -> 힙 영역
+
+// 스택 영역
+// - 함수가 끝나면 같이 정리되는 불안정한 메모리
+// - 일시적인 용도로 사용
+
+// 데이터 영역
+// - 프로그램이 실행되는 도중에는 '무조건' 사용되는 영역
+
+// 힙 영역
+// - 필요할 떄만 사용하고, 필요 없으면 반납할 수 있는 영역
+// - 스택과는 다르게 생성/소멸 시점을 관리할 수 있는 영역
+// 동적할당과 연관된 함수/연산자: malloc/free, new/delete, new[]/delete[]
+
+class Monster
+{
+public:
+    Monster()
+    {
+        cout << "Monster()" << endl;
+    }
+
+    ~Monster()
+    {
+        cout << "~Monster()" << endl;
+    }
+
+public:
+    int _hp;
+    int _x;
+    int _y;
+};
+
+#pragma endregion
 
 int main()
 {
@@ -1786,34 +1826,109 @@ int main()
     
 #pragma endregion
 
-
 #pragma region 객체지향 마무리
     
-    Marine::s_attack = 6;
-    Marine m1;
-    m1._hp = 40;
-    m1.TakeDamage(10);
-    //m1.s_attack = 6;
+    //Marine::s_attack = 6;
+    //Marine m1;
+    //m1._hp = 40;
+    //m1.TakeDamage(10);
+    ////m1.s_attack = 6;
 
-    Marine m2;
-    m2._hp = 40;
-    m2.TakeDamage(5);
-    //m2.s_attack = 6;
+    //Marine m2;
+    //m2._hp = 40;
+    //m2.TakeDamage(5);
+    ////m2.s_attack = 6;
 
-    // 마린 공격력 업그레이드!
-    Marine::s_attack = 7;
-    Marine::SetAttack();
+    //// 마린 공격력 업그레이드!
+    //Marine::s_attack = 7;
+    //Marine::SetAttack();
 
-    // 스택 영역이 아닌 .data 영역
-    static int id = 10;
-    int a = id;
+    //// 스택 영역이 아닌 .data 영역
+    //static int id = 10;
+    //int a = id;
 
-    cout << GenerateId() << endl;
-    cout << GenerateId() << endl;
-    cout << GenerateId() << endl;
-    cout << GenerateId() << endl;
-    cout << GenerateId() << endl;
+    //cout << GenerateId() << endl;
+    //cout << GenerateId() << endl;
+    //cout << GenerateId() << endl;
+    //cout << GenerateId() << endl;
+    //cout << GenerateId() << endl;
     
+#pragma endregion
+
+#pragma region 동적할당
+
+    // 유저 영역 (메모장, LOL, 곰플레이어등 응용 프로그램)
+    // -----------------------------------------------------
+    // 커널 영역 (운영체제의 핵심 코드)
+
+    // 유저 영역) 운영체제에서 제공하는 API 호출
+    // 커널 영역) 메모리 할당해서 리턴
+    // 유저 영역) 할당된 메모리 받아서 사용
+
+    // C++에서는 기본적으로 CRT(C 런타임 라이브러리)의 [힙 관리자]를 통해 힙 영역 사용
+    // 직접 API를 통해 힙을 생성하고 관리할 수도 있음 (MMORPG 서버 메모리 풀링)
+    
+
+    // malloc
+    // - 할당할 메모리 크기를 건내준다
+    // - 메모리 할당 후 시작 주소를 가리키는 포인터를 반환해준다 (메모리 부족시 NULL)
+    void* pointer = malloc(sizeof(Monster));
+    Monster* m1 = (Monster*) pointer;
+    m1->_hp = 100;
+    m1->_x = 1;
+    m1->_y = 2;
+
+
+    // free
+    // - malloc (혹은 기타 calloc, realloc 등)을 통해 할당된 영역을 해제
+    // - 힙 관리자가 할당/미할당 여부를 구분해서 관리
+    // - 만약 free를 하지 않으면 메모리 누수가 일어날 수 있다
+    free(pointer);
+    m1 = nullptr;
+    pointer = nullptr;
+
+    // [일어날 수 있는 버그]
+    // - Heap Overflow
+    // 유효한 힙 범위를 초과해서 사용하는 문제
+    
+    // - Double Free
+    // 대부분 그냥 크래시만 나고 끝난다
+    //free(pointer);
+
+    // - Use-After-Free
+    // free된 메모리에 계속 접근 가능한 문제
+    /*m1->_hp = 100;
+    m1->_x = 1;
+    m1->_y = 2;*/
+
+    
+    // new / delete
+    // - C++에 추가됨
+    // - malloc/free은 함수, new/delete는 연산자
+    Monster* m2 = new Monster;
+    m2->_hp = 200;
+    m2->_x = 2;
+    m2->_y = 3;
+    delete m2;
+
+    //m2->_hp = 100;  // Use-After-Free
+
+    // new[] / delete[]
+    Monster* m3 = new Monster[5];
+    m3->_hp = 300;
+    m3->_x = 3;
+    m3->_y = 4;
+
+    m3[1]._hp = 400;
+    m3[1]._x = 4;
+    m3[1]._y = 5;
+    delete[] m3;
+
+    // malloc/free vs new/delete
+    // - 사용 편의성 -> new/delete
+    // - 타입에 상관없이 특정한 크기의 메모리 영역을 할당 받으려면? -> malloc/free
+    // - 둘의 가장 근본적인 중요한 차이는 new/delete는 (생성타입이 클래스일 경우) 생성자/소멸자를 호출해준다.
+
 #pragma endregion
 
 }
