@@ -1208,24 +1208,168 @@ using namespace std;
 // - 스택과는 다르게 생성/소멸 시점을 관리할 수 있는 영역
 // 동적할당과 연관된 함수/연산자: malloc/free, new/delete, new[]/delete[]
 
-class Monster
-{
-public:
-    Monster()
-    {
-        cout << "Monster()" << endl;
-    }
+//class Monster
+//{
+//public:
+//    Monster()
+//    {
+//        cout << "Monster()" << endl;
+//    }
+//
+//    ~Monster()
+//    {
+//        cout << "~Monster()" << endl;
+//    }
+//
+//public:
+//    int _hp;
+//    int _x;
+//    int _y;
+//};
 
-    ~Monster()
-    {
-        cout << "~Monster()" << endl;
-    }
+#pragma endregion
 
-public:
-    int _hp;
-    int _x;
-    int _y;
-};
+#pragma region 타입변환
+
+//class Knight
+//{
+//public:
+//    int _hp = 10;
+//};
+//
+//class Dog
+//{
+//public:
+//    Dog()
+//    {
+//        
+//    }
+//
+//    // 타입 변환 생성자
+//    Dog(const Knight& knight)
+//    {
+//        _age = knight._hp;
+//    }
+//
+//    // 타입 변환 연산자
+//    operator Knight()
+//    {
+//        return (Knight)(*this);
+//    }
+//
+//public:
+//    int _age = 1;
+//    int _cuteness = 2;
+//};
+//
+//class BullDog : public Dog
+//{
+//public:
+//    bool _french;   // 프렌치 불독
+//};
+
+#pragma endregion
+
+#pragma region 타입변환(포인터)
+
+//class Knight
+//{
+//public:
+//    int _hp = 0;
+//};
+//
+//class Item
+//{
+//public:
+//    Item()
+//    {
+//        cout << "Item()" << endl;
+//    }
+//
+//    Item(int itemType) : _itemType(itemType)
+//    {
+//        cout << "Item(int itemType)" << endl;
+//        //_itemType = itemType;
+//    }
+//
+//    Item(const Item& item)
+//    {
+//        cout << "Item(const Item&)" << endl;
+//    }
+//
+//    virtual ~Item()
+//    {
+//        cout << "~Item()" << endl;
+//    }
+//
+//    virtual void Test()
+//    {
+//        cout << "Test Item" << endl;
+//    }
+//
+//public:
+//    int _itemType = 0;
+//    int _itemDbId = 0;
+//    
+//    char _dummy[4096] = {};
+//};
+//
+//enum ItemType
+//{
+//    IT_WEAPON = 0,
+//    IT_ARMOR = 1,
+//};
+//
+//class Weapon : public Item
+//{
+//public:
+//    Weapon() : Item(IT_WEAPON), _damage(rand() % 100)
+//    {
+//        //_itemType = IT_WEAPON;
+//        cout << "Weapon()" << endl;
+//    }
+//
+//    ~Weapon()
+//    {
+//        cout << "~Weapon()" << endl;
+//    }
+//
+//    virtual void Test()
+//    {
+//        cout << "Test Weapon" << endl;
+//    }
+//
+//public:
+//    int _damage = 0;
+//};
+//
+//class Armor : public Item
+//{
+//public:
+//    Armor() : Item(IT_ARMOR)
+//    {
+//        //_itemType = IT_ARMOR;
+//        cout << "Armor()" << endl;
+//    }
+//
+//    ~Armor()
+//    {
+//        cout << "~Armor()" << endl;
+//    }
+//    
+//public:
+//    int _defence = 0;
+//};
+//
+//void TestItem(Item item)
+//{
+//
+//}
+//
+//void TestItemPtr(Item* item)
+//{
+//    item->Test();
+//}
 
 #pragma endregion
 
@@ -1872,20 +2016,20 @@ int main()
     // malloc
     // - 할당할 메모리 크기를 건내준다
     // - 메모리 할당 후 시작 주소를 가리키는 포인터를 반환해준다 (메모리 부족시 NULL)
-    void* pointer = malloc(sizeof(Monster));
-    Monster* m1 = (Monster*) pointer;
-    m1->_hp = 100;
-    m1->_x = 1;
-    m1->_y = 2;
+    //void* pointer = malloc(sizeof(Monster));
+    //Monster* m1 = (Monster*) pointer;
+    //m1->_hp = 100;
+    //m1->_x = 1;
+    //m1->_y = 2;
 
 
-    // free
-    // - malloc (혹은 기타 calloc, realloc 등)을 통해 할당된 영역을 해제
-    // - 힙 관리자가 할당/미할당 여부를 구분해서 관리
-    // - 만약 free를 하지 않으면 메모리 누수가 일어날 수 있다
-    free(pointer);
-    m1 = nullptr;
-    pointer = nullptr;
+    //// free
+    //// - malloc (혹은 기타 calloc, realloc 등)을 통해 할당된 영역을 해제
+    //// - 힙 관리자가 할당/미할당 여부를 구분해서 관리
+    //// - 만약 free를 하지 않으면 메모리 누수가 일어날 수 있다
+    //free(pointer);
+    //m1 = nullptr;
+    //pointer = nullptr;
 
     // [일어날 수 있는 버그]
     // - Heap Overflow
@@ -1905,30 +2049,318 @@ int main()
     // new / delete
     // - C++에 추가됨
     // - malloc/free은 함수, new/delete는 연산자
-    Monster* m2 = new Monster;
-    m2->_hp = 200;
-    m2->_x = 2;
-    m2->_y = 3;
-    delete m2;
+    //Monster* m2 = new Monster;
+    //m2->_hp = 200;
+    //m2->_x = 2;
+    //m2->_y = 3;
+    //delete m2;
 
-    //m2->_hp = 100;  // Use-After-Free
+    ////m2->_hp = 100;  // Use-After-Free
 
-    // new[] / delete[]
-    Monster* m3 = new Monster[5];
-    m3->_hp = 300;
-    m3->_x = 3;
-    m3->_y = 4;
+    //// new[] / delete[]
+    //Monster* m3 = new Monster[5];
+    //m3->_hp = 300;
+    //m3->_x = 3;
+    //m3->_y = 4;
 
-    m3[1]._hp = 400;
-    m3[1]._x = 4;
-    m3[1]._y = 5;
-    delete[] m3;
+    //m3[1]._hp = 400;
+    //m3[1]._x = 4;
+    //m3[1]._y = 5;
+    //delete[] m3;
 
     // malloc/free vs new/delete
     // - 사용 편의성 -> new/delete
     // - 타입에 상관없이 특정한 크기의 메모리 영역을 할당 받으려면? -> malloc/free
     // - 둘의 가장 근본적인 중요한 차이는 new/delete는 (생성타입이 클래스일 경우) 생성자/소멸자를 호출해준다.
 
+#pragma endregion
+
+#pragma region 타입변환
+
+    // --------------------- 타입 변환 유형 (비트열 재구성 여부) ---------------------
+
+    // [1] 값 타입 변환
+    // 특징) 의미를 유지하기 위해 원본 객체와 다른 비트열 재구성
+    //{
+    //    int a = 123456789;      // 2의 보수
+    //    float b = (float)a;     // 부동소수점(지수 + 유효숫자)
+    //    cout << b << endl;
+    //}
+
+    // [2] 참조 타입 변환
+    // 특징) 비트열을 재구성하지 않고, 데이터를 바라보는 '관점'만 바꾸는 것
+    // 거의 쓸일 없지만, 포인터 타입 변환도 '참조 타입 변환'과 동일한 룰을 따른다
+    /*{
+        int a = 123456789;
+        float b = (float&)a;
+        cout << b << endl;
+    }*/
+
+    // --------------------- 안전도 분류 ---------------------
+
+    // [1] 안전한 변환
+    // 특징) 의미가 항상 100% 완전히 일치하는 경우
+    // 같은 타입이면서 크기만 더 큰 타입으로 이동
+    // 작은 타입 -> 큰 타입으로 이동 (업 캐스팅)
+    /*{
+        int a = 123456789;
+        __int64 b = a;
+        cout << b << endl;
+    }*/
+
+    // [2] 불안전한 변환
+    // 특징) 의미가 항상 100% 일치한다고 보장하지 못하는 경우
+    // 타입이 다르거나 같은 타입이지만 큰 타입 -> 작은 타입 이동 (다운 캐스팅)
+    /*{
+        int a = 123456789;
+        float b = a;
+        short c = a;
+        cout << b << endl;
+        cout << c << endl;
+    }*/
+
+    // --------------------- 프로그래머 의도에 따라 분류 ---------------------
+
+    // [1] 암시적 변환
+    // 특징) 이미 알려진 타입 변환 규칙에 따라서 컴파일러가 '자동'으로 타입 변환
+    //{
+    //    int a = 123456789;
+    //    float b = a;    // 암시적 변환
+    //    cout << b << endl;
+    //}
+
+    // [2] 명시적 변환
+    //{
+    //    int a = 123456789;
+    //    int* b = (int*)a;   // 명시적 변환
+    //    cout << b << endl;
+    //}
+
+    // --------------------- 아무런 연관 관계과 없는 클래스 사이의 변환 ---------------------
+
+    // [1] 연관없는 클래스 사이의 '값 타입' 변환
+    // 특징) 일반적으로 안 됨 (예외: 타입 변환 생성자, 타입 변환 연산자)
+    /*{
+        Knight knight;
+        Dog dog = (Dog)knight;
+
+        Knight knight2 = dog;
+    }*/
+
+    // [2] 연관없는 클래스 사이의 참조 타입 변환
+    // 특징) 명시적으로는 통과
+    //{
+    //    Knight knight;
+    //    // 어셈블리 관점: 포인터 = 참조
+
+    //    // [ 주소 ] -> [ Dog ]
+    //    Dog& dog = (Dog&)knight;
+    //    dog._cuteness = 12;
+    //}
+
+    // --------------------- 상속 관계에 있는 클래스 사이의 변환 ---------------------
+
+    // [1] 상속 관계 클래스의 값 타입 변환
+    // 특징) 자식 -> 부모 o   /   부모 -> 자식 x
+    //{
+    //    /*Dog dog;
+    //    BullDog bullDog = (BullDog)dog;*/
+
+    //    BullDog bullDog;
+    //    Dog dog = bullDog;
+    //}
+
+    // [2] 상속 관계 클래스의 참조 타입 변환
+    // 특징) 자식 -> 부모 o   /   부모 -> 자식 x (명시적으로는 o)
+    //{
+    //    /*Dog dog;
+    //    BullDog& bullDog = (BullDog&)dog;*/
+
+    //    BullDog bullDog;
+    //    Dog dog = bullDog;
+    //}
+
+    // 결론)
+    // [값 타입 변환]: 진자 비트열도 바꾸고 논리적으로 말이 되게 바꾸는 변환
+    // - 논리적으로 말이 된다? (ex. BullDog -> Dog) o
+    // - 논리적으로 말이 안 된다 (ex. Dog -> BullDog, Dog -> Knight) x
+
+    // [참조 타입 변환]: 비트열은 그대로 두고 해석하는 '관점'만 바꾸는 변환
+    // - 명시적으로 강제 캐스팅이 가능하지만, '암시적'으로 가능한지는 안정성 여부에 달렸다
+    // -- 안전 (ex. BullDog -> Dog&) o
+    // -- 위험 (ex. Dog -> BullDog&)
+    // --- 메모리 침범 위험이 있는 경우는 '암시적'으로 해주지 않음
+
+#pragma endregion
+
+#pragma region 타입변환(포인터)
+
+    // 복습
+    //{
+    //    //  stack [ item ]
+    //    Item item;
+
+    //    // stack [ item2 ] -> heap [ Item ]
+    //    Item* item2 = new Item();
+
+    //    TestItem(item);
+    //    TestItem(*item2);
+
+    //    TestItemPtr(&item);
+    //    TestItemPtr(item2);
+
+    //    // 메모리 누수(Memory Leak) -> 점점 가용 메모리가 줄어들어서 crash
+    //    delete item2;
+    //}
+
+    //{
+    //    cout << "-----------------------------------------" << endl;
+    //    
+    //    // 스택 메모리에 아이템 100개가 있는 상태
+    //    Item item3[100] = {};
+
+    //    cout << "-----------------------------------------" << endl;
+
+    //    // 아이템을 가르키는 포인터 변수가 100개. 실제 아이템은 1개도 없을 수도 있음.
+    //    Item* item4[100] = {};
+
+    //    // heap에 아이템 생성
+    //    for (int i = 0; i < 100; i++)
+    //    {
+    //        item4[i] = new Item();
+    //    }
+
+    //    cout << "-----------------------------------------" << endl;
+
+    //    // heap에 생성된 아이템 해제
+    //    for (int i = 0; i < 100; i++)
+    //    {
+    //        delete item4[i];
+    //    }
+
+    //    cout << "-----------------------------------------" << endl;
+    //}
+
+
+    // 연관성이 없는 클래스 사이의 포인터 변환 테스트
+    //{
+    //    // stack [ knight ] -> heap [ _hp(4) ]
+    //    Knight* knight = new Knight();
+    //    
+    //    // 암시적으로는 x
+    //    // 명시적으로는 o
+    //    // stack [ item ] -> heap [ _hp(4) ]
+    //    Item* item = (Item*)knight;
+    //    item->_itemType = 2;
+    //    //item->_itemDbId = 1;
+
+    //    delete knight;
+    //}
+
+    //// 부모 -> 자식 변환 테스트
+    //{
+    //    Item* item = new Item();
+
+    //    Weapon* weapon = (Weapon*)item;
+
+    //    delete item;
+    //}
+
+    //// 자식 -> 부모 변환 테스트
+    //{
+    //    Weapon* weapon = new Weapon();
+
+    //    Item* item = weapon;
+
+    //    TestItemPtr(item);
+    //    
+    //    delete weapon;
+    //}
+
+    //// 명시적으로 타입 변환할 때는 항상 조심해야 한다!
+    //Item* inventory[20] = {};
+
+    //srand((unsigned int)time(nullptr));
+
+    //for (int i = 0; i < 20; i++)
+    //{
+    //    int itemType = rand() % 2;
+    //    switch (itemType)
+    //    {
+    //    case IT_WEAPON:
+    //        inventory[i] = new Weapon();
+    //        break;
+    //    case IT_ARMOR:
+    //        inventory[i] = new Armor();
+    //        break;
+    //    default:
+    //        break;
+    //    }
+    //}
+
+    //for (int i = 0; i < 20; i++)
+    //{
+    //    Item* item = inventory[i];
+    //    if (item == nullptr)
+    //    {
+    //        continue;
+    //    }
+
+    //    int itemType = item->_itemType;
+    //    switch (itemType)
+    //    {
+    //    case IT_WEAPON:
+    //    {
+    //        Weapon* weapon = (Weapon*)item;
+    //        cout << "Weapon Damage: " << weapon->_damage << endl;
+    //        break;
+    //    }
+    //    case IT_ARMOR:
+    //    {
+    //        Armor* armor = (Armor*)item;
+    //        cout << "Armor Defence: " << armor->_defence << endl;
+    //        break;
+    //    }
+    //    default:
+    //        break;
+    //    }
+    //}
+
+    //// ************************ 매우 중요 ************************
+    //for (int i = 0; i < 20; i++)
+    //{
+    //    Item* item = inventory[i];
+    //    if (item == nullptr)
+    //    {
+    //        continue;
+    //    }
+    //    // Item 클래스의 소멸자에 virtual 키워드를 붙이면 자식 클래스의 타입에 맞게 소멸자를 호출해준다.
+    //    delete item;
+
+    //    /*switch (item->_itemType)
+    //    {
+    //    case IT_WEAPON:
+    //    {
+    //        Weapon* weapon = (Weapon*)item;
+    //        delete weapon;
+    //        break;
+    //    }
+    //    case IT_ARMOR:
+    //    {
+    //        Armor* armor = (Armor*)item;
+    //        delete armor;
+    //        break;
+    //    }
+    //    default:
+    //        break;
+    //    }*/
+    //}
+
+    // [결론]
+    // - 포인터 vs 일반 타입: 차이를 이해하자
+    // - 포인터 사이의 타입변환(캐스팅)을 할 때는 매우 조심해야 한다!
+    // - 부모-자식 관계에서 부모 클래스의 소멸자에는 무조건 "virtual"을 붙이자!
+    
 #pragma endregion
 
 }
