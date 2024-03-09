@@ -1373,6 +1373,137 @@ using namespace std;
 
 #pragma endregion
 
+#pragma region 얕은 복사 vs 깊은 복사
+
+//class Pet
+//{
+//public:
+//    Pet()
+//    {
+//        cout << "Pet()" << endl;
+//    }
+//
+//    Pet(const Pet& pet)
+//    {
+//        cout << "Pet(const Pet&)" << endl;
+//    }
+//
+//    Pet& operator=(const Pet& pet) {
+//        cout << "operator=(const Pet&)" << endl;
+//        return *this;
+//    }
+//
+//    ~Pet()
+//    {
+//        cout << "~Pet()" << endl;
+//    }
+//};
+//
+//class Player
+//{
+//public:
+//    Player()
+//    {
+//        cout << "Player()" << endl;
+//    }
+//
+//    Player(const Player& player)
+//    {
+//        cout << "Player(const Player&)" << endl;
+//        _level = player._level;
+//    }
+//
+//    Player& operator=(const Player& player)
+//    {
+//        cout << "Player(const Player&)" << endl;
+//        _level = player._level;
+//        return *this;
+//    }
+//
+//    ~Player()
+//    {
+//        cout << "~Player()" << endl;
+//    }
+//
+//public:
+//    int _level = 0;
+//};
+//
+//class Knight : public Player
+//{
+//public:
+//    Knight()
+//    {
+//        cout << "Knight()" << endl;
+//        _pet = new Pet();
+//    }
+//
+//    Knight(const Knight& knight) : Player(knight), _pet(new Pet(*knight._pet))
+//    {
+//        cout << "Knight(const Knight&)" << endl;
+//        _hp = knight._hp;
+//        //_pet = new Pet(*knight._pet);   // 깊은 복사
+//    }
+//
+//    Knight& operator=(const Knight& knight)
+//    {
+//        cout << "operator=(const Knight&)" << endl;
+//        Player::operator=(knight);
+//        _hp = knight._hp;
+//        _pet = new Pet(*knight._pet);   // 깊은 복사
+//        return *this;
+//    }
+//
+//    ~Knight()
+//    {
+//        cout << "~Knight()" << endl;
+//        delete _pet;
+//    }
+//
+//public:
+//    int _hp = 100;
+//    Pet* _pet;
+//};
+
+#pragma endregion
+
+#pragma region 캐스팅 4종류
+
+// 1) static_cast
+// 2) dynamic_cast
+// 3) const_cast
+// 4) reinterpret_cast
+
+//class Player
+//{
+//public:
+//    virtual ~Player() {}
+//};
+//
+//class Knight : public Player
+//{
+//
+//};
+//
+//class Archer : public Player
+//{
+//
+//};
+//
+//class Dog
+//{
+//
+//};
+//
+//
+//void PrintName(char* str)
+//{
+//    cout << str << endl;
+//}
+
+#pragma endregion
+
+
 int main()
 {
 
@@ -2361,6 +2492,98 @@ int main()
     // - 포인터 사이의 타입변환(캐스팅)을 할 때는 매우 조심해야 한다!
     // - 부모-자식 관계에서 부모 클래스의 소멸자에는 무조건 "virtual"을 붙이자!
     
+#pragma endregion
+
+#pragma region 얕은 복사 vs 깊은 복사
+    
+    //Knight knight;              // 기본 생성자
+    //knight._hp = 200;
+    //knight._level = 99;
+
+    //cout << "---------- 복사 생성자 ----------" << endl;
+    //Knight knight2 = knight;    // 복사 생성자
+    ////Knight knight3(knight);     // 복사 생성자
+
+    //cout << "---------- 복사 대입 연산자 ----------" << endl;
+    //Knight knight3;             // 기본 생성자
+    //knight3 = knight;           // 복사 대입 연산자
+
+    // [복사 생성자], [복사 대입 연산자]
+    // 둘 다 컴파일러가 '암시적'으로 만들어준다
+    // 직접적으로 정의해서 사용해야하는 상황이 생길 수 있다
+    // - ex) 멤버 포인터 변수를 들고 있는 경우
+
+    // [ 얕은 복사 Shallow Copy ]
+    // 멤버 데이터를 비트열 단위로 '똑같이' 복사 (메모리 영역 값을 그대로 복사)
+    // 포인터 멤버 변수 -> 포인터 주소값을 똑같이 복사 -> 동일한 객체를 가르키는 상태가 됨
+
+    // [ 깊은 복사 Deep Copy ]
+    // 멤버 데이터가 참조(주소) 값이라면, 데이터를 새로 만들어준다 (원본 객체가 참조하는 대상까지 새로 만들어서 복사)
+    // 포인터 멤버 변수 -> 새로운 객체를 생성 -> 서로 다른 객체를 가르키는 상태가 됨
+
+    // - 암시적 복사 생성자 step
+    // 1) 부모 클래스의 복사 생성자 호출
+    // 2) 멤버 클래스의 복사 생성자 호출
+    // 3) 멤버가 기본 타입일 경우 메모리 복사 (얕은 복사 Shallow Copy)
+
+    // - 명시적 복사 생성자 steop
+    // 1) 부모 클래스의 기본 생성자 호출
+    // 2) 멤버 클래스의 기본 생성자 호출
+
+    // - 암시적 복사 대입 연산자 step
+    // 1) 부모 클래스의 복사 대입 연산자 호출
+    // 2) 멤버 클래스의 복사 대입 연산자 호출
+    // 3) 멤버가 기본 타입일 경우 메모리 복사 (얕은 복사 Shallow Copy)
+
+    // - 명시적 복사 대입 연산자 step
+    // 1) 알아서 해주는 것 없음
+    
+    // 객체를 '복사' 한다는 것은 두 객체의 값들을 일치시키려는 것
+    // 따라서 기본적으로 얕은 복사 (Shallow Copy) 방식으로 동작
+    // 명시적 복사 -> [모든 책임]을 프로그래머한테 위임
+
+#pragma endregion
+
+#pragma region 캐스팅 4종류
+
+    // static_cast: 상식적인 캐스팅만 허용해준다
+    // 1) int <-> float
+    // 2) Player* -> Knight* (다운 캐스팅)
+    
+    //int hp = 100;
+    //int maxHp = 200;
+    //float ratio = static_cast<float>(hp) / maxHp;
+
+    //// 부모 -> 자식, 자식 -> 부모
+    //Player* p = new Knight();
+    //Knight* k = static_cast<Knight*>(p);
+
+    //Knight* k1 = new Knight();
+    //Player* p1 = static_cast<Player*>(k1);
+
+    //// dynamic_cast: 상속 관계에서의 안전한 형변환
+    //// RTTI (RunTime Type Information)
+    //// 다형성을 활용하는 방식
+    //// - 가상 함수를 하나라도 만들면, 객체의 메모리에 가상 함수 테이블 (vftable) 주소가 기입된다
+    //// - 만약 잘못된 타입으로 캐스팅을 했으면, nullptr을 반환한다
+    //// 가상 함수가 하나라도 존재해야 함
+    //// 이를 이용해서 올바른 타입으로 캐스팅 했는지 확인할 때 유용하다
+    //Knight* k2 = dynamic_cast<Knight*>(p);
+
+    //// const_cast: const를 떼거나 붙일 때 활용
+    //PrintName(const_cast<char*>("Baek"));
+
+    //// reinterpret_cast
+    //// 가장 위험하고 강력한 캐스팅
+    //// 're-interpret': 다시-간주하다/생각하다
+    //// - 포인터와 전혀 관계 없는 다른 타입으로 변환 등에 활용
+    //__int64 address = reinterpret_cast<__int64>(k2);
+
+    //Dog* dog = reinterpret_cast<Dog*>(k2);
+
+    //void* ptr = malloc(1000);
+    //Dog* dog = reinterpret_cast<Dog*>(ptr);
+
 #pragma endregion
 
 }
