@@ -2598,6 +2598,7 @@ int main()
     Player* p2 = new Player();  // 동적할당 (Heap)
 
     p1._target = p2;
+    p1.KillPlayer();
 
 #pragma endregion
 

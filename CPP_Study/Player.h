@@ -7,6 +7,7 @@ class Player
 {
 public:
 	void KillMonster();
+	void KillPlayer();
 
 public:
 	int _hp;
