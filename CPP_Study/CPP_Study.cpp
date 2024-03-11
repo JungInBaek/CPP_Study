@@ -1503,6 +1503,12 @@ using namespace std;
 
 #pragma endregion
 
+#pragma region 전방선언
+
+#include "Player.h"
+
+#pragma endregion
+
 
 int main()
 {
@@ -2583,6 +2589,15 @@ int main()
 
     //void* ptr = malloc(1000);
     //Dog* dog = reinterpret_cast<Dog*>(ptr);
+
+#pragma endregion
+
+#pragma region 전방선언
+
+    Player p1;                  // 지역변수 (Stack)
+    Player* p2 = new Player();  // 동적할당 (Heap)
+
+    p1._target = p2;
 
 #pragma endregion
 
