@@ -1511,105 +1511,130 @@ using namespace std;
 
 #pragma region 함수 포인터
 
-class Knight;
+//class Knight;
+//
+//int Add(int a, int b)
+//{
+//    return a + b;
+//}
+//
+//int Sub(int a, int b)
+//{
+//    return a - b;
+//}
+//
+//// typedef의 진실
+//// typedef 왼쪽값 오른쪽값 -> 오른쪽 (커스텀 타입 정의)
+//// 정확히는 왼쪽/오른쪽 기준이 아니라
+//// [선언 문법]에서 typedef를 앞에다 붙이는 것이다.
+//
+//// 단계별 선언
+//typedef int FUNC(int, int);     // 함수 선언 -> 타입 선언
+//FUNC* func = &Sub;              // 함수 타입 포인터 변수 선언 -> 초기화 (& 생략 가능, C언어 호환성 때문)
+//
+//// 한번에 선언
+//typedef int (*PFUNC)(int, int); // 함수 포인터 선언 -> 타입 선언
+//PFUNC pfunc = &Sub;             // 함수 포인터 타입 변수 선언 -> 초기화
+//
+//// 멤버 함수 포인터 선언 -> 타입 선언
+//typedef int (Knight::*PMEMFUNC)();
+//
+//
+//class Knight
+//{
+//public:
+//    int GetHp()
+//    {
+//        cout << "GetHp()" << endl;
+//        return _hp;
+//    }
+//
+//public:
+//    int _hp;
+//};
+//
+//
+//class Item
+//{
+//    /*class _initializer
+//    {
+//    public:
+//        _initializer()
+//        {
+//            s_id = 0;
+//        }
+//    };*/
+//
+//public:
+//    Item() :_itemId(s_id++), _rarity(0), _ownerId(0)
+//    {
+//
+//    }
+//
+//private:
+//    static int s_id;
+//    //static _initializer s_initializer;
+//
+//public:
+//    int _itemId;
+//    int _rarity;
+//    int _ownerId;
+//};
+//
+//int Item::s_id = 0;
+////Item::_initializer Item::s_initializer;
+//
+//typedef bool ITEM_SELECTOR(Item*, int);
+//
+//Item* FindItem(Item items[], int itemCount, ITEM_SELECTOR* selector, int value)
+//{
+//    for (int i = 0; i < itemCount; i++)
+//    {
+//        Item* item = &items[i];
+//
+//        // TODO 동작
+//        if (selector(item, value))
+//        {
+//            return item;
+//        }
+//    }
+//    return nullptr;
+//}
+//
+//bool IsRareItem(Item* item, int rarity)
+//{
+//    return item->_rarity >= rarity;
+//}
+//
+//bool IsOwnerItem(Item* item, int ownerId)
+//{
+//    return item->_ownerId == ownerId;
+//}
 
-int Add(int a, int b)
-{
-    return a + b;
-}
+#pragma endregion
 
-int Sub(int a, int b)
-{
-    return a - b;
-}
+#pragma region 함수 객체
 
-// typedef의 진실
-// typedef 왼쪽값 오른쪽값 -> 오른쪽 (커스텀 타입 정의)
-// 정확히는 왼쪽/오른쪽 기준이 아니라
-// [선언 문법]에서 typedef를 앞에다 붙이는 것이다.
-
-// 단계별 선언
-typedef int FUNC(int, int);     // 함수 선언 -> 타입 선언
-FUNC* func = &Sub;              // 함수 타입 포인터 변수 선언 -> 초기화 (& 생략 가능, C언어 호환성 때문)
-
-// 한번에 선언
-typedef int (*PFUNC)(int, int); // 함수 포인터 선언 -> 타입 선언
-PFUNC pfunc = &Sub;             // 함수 포인터 타입 변수 선언 -> 초기화
-
-// 멤버 함수 포인터 선언 -> 타입 선언
-typedef int (Knight::*PMEMFUNC)();
-
-
-class Knight
+class Functor
 {
 public:
-    int GetHp()
+    void operator()()
     {
-        cout << "GetHp()" << endl;
-        return _hp;
+        cout << "Functor Test" << endl;
+        cout << _value << endl;
     }
 
-public:
-    int _hp;
-};
-
-
-class Item
-{
-    /*class _initializer
+    int operator()(int num)
     {
-    public:
-        _initializer()
-        {
-            s_id = 0;
-        }
-    };*/
-
-public:
-    Item() :_itemId(s_id++), _rarity(0), _ownerId(0)
-    {
-
+        cout << "Functor Test(int)" << endl;
+        _value += num;
+        cout << _value << endl;
+        return _value;
     }
 
 private:
-    static int s_id;
-    //static _initializer s_initializer;
-
-public:
-    int _itemId;
-    int _rarity;
-    int _ownerId;
+    int _value = 0;
 };
-
-int Item::s_id = 0;
-//Item::_initializer Item::s_initializer;
-
-typedef bool ITEM_SELECTOR(Item*, int);
-
-Item* FindItem(Item items[], int itemCount, ITEM_SELECTOR* selector, int value)
-{
-    for (int i = 0; i < itemCount; i++)
-    {
-        Item* item = &items[i];
-
-        // TODO 동작
-        if (selector(item, value))
-        {
-            return item;
-        }
-    }
-    return nullptr;
-}
-
-bool IsRareItem(Item* item, int rarity)
-{
-    return item->_rarity >= rarity;
-}
-
-bool IsOwnerItem(Item* item, int ownerId)
-{
-    return item->_ownerId == ownerId;
-}
 
 #pragma endregion
 
@@ -2708,62 +2733,75 @@ int main()
 
 #pragma region 함수 포인터
 
-    int number = 10;
+    //int number = 10;
 
-    typedef int DATA;
+    //typedef int DATA;
 
-    // 1) 포인터           *
-    // 2) 변수 이름        pointer
-    // 3) 데이터 타입      int
-    DATA* pointer = &number;
+    //// 1) 포인터           *
+    //// 2) 변수 이름        pointer
+    //// 3) 데이터 타입      int
+    //DATA* pointer = &number;
 
 
-    // 함수 포인터
-    // 1) 포인터           *
-    // 2) 변수 이름        fn
-    // 3) 데이터 타입      함수: int (int, int);
-    int (*fn)(int, int) = Add; // & 생략 가능
+    //// 함수 포인터
+    //// 1) 포인터           *
+    //// 2) 변수 이름        fn
+    //// 3) 데이터 타입      함수: int (int, int);
+    //int (*fn)(int, int) = Add; // & 생략 가능
 
-    int result = fn(1, 2);      // 기본 문법
-    cout << result << endl;
+    //int result = fn(1, 2);      // 기본 문법
+    //cout << result << endl;
 
-    int result2 = (*fn)(1, 2);  // 함수 포인터는 *(접근 연산자)가 붙어도 함수 주소
-    cout << result2 << endl;
+    //int result2 = (*fn)(1, 2);  // 함수 포인터는 *(접근 연산자)가 붙어도 함수 주소
+    //cout << result2 << endl;
 
-    Item items[10] = {};
-    items[3]._rarity = 2;
-    items[5]._ownerId = 5;
-    Item* findItem = FindItem(items, 10, &IsOwnerItem, 5);
-    if (findItem != nullptr)
-    {
-        cout << findItem->_itemId << endl;
-    }
-    cout << "검색 끝" << endl;
+    //Item items[10] = {};
+    //items[3]._rarity = 2;
+    //items[5]._ownerId = 5;
+    //Item* findItem = FindItem(items, 10, &IsOwnerItem, 5);
+    //if (findItem != nullptr)
+    //{
+    //    cout << findItem->_itemId << endl;
+    //}
+    //cout << "검색 끝" << endl;
 
+    //
+    //Knight k1;
+    //k1.GetHp();
+
+    //// 멤버 함수 포인터
+    //PMEMFUNC mfn = &Knight::GetHp;
+    //(k1.*mfn)();
+
+    //Knight* k2 = new Knight();
+    //((*k2).*mfn)();
+    //(k2->*mfn)();
+
+    //// 멤버 함수 포인터 변수 선언, 정의, 초기화
+    //int (Knight:: * mfn2)() = &Knight::GetHp;
+    //(k2->*mfn2)();
+
+    //typedef int (Knight::*PMFN)();
+    //PMFN pmfn = &Knight::GetHp;
+    //(k1.*pmfn)();
+    //((*k2).*pmfn)();
+    //(k2->*pmfn)();
+
+    //delete k2;
+
+#pragma endregion
+
+#pragma region 함수 객체
+
+    // 함수 객체(Functor): 함수처럼 동작하는 객체
     
-    Knight k1;
-    k1.GetHp();
+    // 함수 포인터의 단점
+    // 1) 시그니처가 불일치할 경우 사용 불가
+    // 2) 상태를 가질 수 없다
 
-    // 멤버 함수 포인터
-    PMEMFUNC mfn = &Knight::GetHp;
-    (k1.*mfn)();
-
-    Knight* k2 = new Knight();
-    ((*k2).*mfn)();
-    (k2->*mfn)();
-
-    // 멤버 함수 포인터 변수 선언, 정의, 초기화
-    int (Knight:: * mfn2)() = &Knight::GetHp;
-    (k2->*mfn2)();
-
-    typedef int (Knight::*PMFN)();
-    PMFN pmfn = &Knight::GetHp;
-    (k1.*pmfn)();
-    ((*k2).*pmfn)();
-    (k2->*pmfn)();
-
-    delete k2;
-
+    Functor functor;
+    functor(5);
+    
 #pragma endregion
 
 }
