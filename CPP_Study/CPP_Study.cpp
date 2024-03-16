@@ -1615,26 +1615,186 @@ using namespace std;
 
 #pragma region 함수 객체
 
-class Functor
+//class Functor
+//{
+//public:
+//    void operator()()
+//    {
+//        cout << "Functor Test" << endl;
+//        cout << _value << endl;
+//    }
+//
+//    int operator()(int num)
+//    {
+//        cout << "Functor Test(int)" << endl;
+//        _value += num;
+//        cout << _value << endl;
+//        return _value;
+//    }
+//
+//private:
+//    int _value = 0;
+//};
+//
+//
+//class MoveTask
+//{
+//public:
+//    void operator()()
+//    {
+//        cout << "해당 좌표로 플레이어 이동" << endl;
+//    }
+//
+//public:
+//    int _playerId;
+//    int _posX;
+//    int _posY;
+//};
+
+#pragma endregion
+
+#pragma region 템플릿 기초: 함수
+
+//class Knight
+//{
+//public:
+//    int _hp = 100;
+//};
+
+// 템플릿: 함수나 클래스를 찍어내는 틀
+// 1) 함수 템플릿
+// 2) 클래스 템플릿
+
+//template<typename T>
+//void Print(T a)
+//{
+//    cout << a << endl;
+//}
+//
+//// 템플릿 특수화
+//template<>
+//void Print(const Knight& a)
+//{
+//    cout << "Knight!!!" << endl;
+//    cout << a._hp << endl;
+//}
+//
+//template<typename T1, typename T2>
+//void Print(T1 a, T2 b)
+//{
+//    cout << a << " " << b << endl;
+//}
+//
+//template<typename T>
+//T Add(T a, T b)
+//{
+//    return a + b;
+//}
+
+// 연산자 오버로딩 (전역함수 버전)
+//ostream& operator<<(ostream& os, const Knight& k)
+//{
+//    os << k._hp;
+//    return os;
+//}
+
+#pragma endregion
+
+#pragma region 템플릿 기초: 클래스
+
+// 템플릿: 함수나 클래스를 찍어내는 틀
+// 1) 함수 템플릿
+// 2) 클래스 템플릿
+
+// teamplate<> 안에 들어가는 것은 [골라줘야 하는 목록]이라 볼 수 있음
+//template<typename T, int SIZE>
+//class RandomBox
+//{
+//public:
+//    T GetRandomData()
+//    {
+//        int idx = rand() % SIZE;
+//        return _data[idx];
+//    }
+//
+//public:
+//    T _data[SIZE];
+//};
+//
+//// 템플릿 특수화
+//template<int SIZE>
+//class RandomBox<double, SIZE>
+//{
+//public:
+//    double GetRandomData()
+//    {
+//        cout << "RandomBox Double" << endl;
+//        int idx = rand() % SIZE;
+//        return _data[idx];
+//    }
+//
+//public:
+//    double _data[SIZE];
+//};
+
+#pragma endregion
+
+#pragma region 콜백 함수
+
+// 콜백 (Callback): 다시 호출하다
+
+// 게임을 만들 때 이런 콜백의 개념이 자주 등장한다.
+// ex) MoveTask 실습 등
+
+// 어떤 상황이 일어나면 -> 이 기능을 호출해줘
+// ex) UI 스킬 버튼을 누르면 -> 스킬을 쓰는 함수를 호출
+
+class Item
 {
 public:
-    void operator()()
-    {
-        cout << "Functor Test" << endl;
-        cout << _value << endl;
-    }
-
-    int operator()(int num)
-    {
-        cout << "Functor Test(int)" << endl;
-        _value += num;
-        cout << _value << endl;
-        return _value;
-    }
-
-private:
-    int _value = 0;
+    int _itemId = 0;
+    int _rarity = 0;
+    int _ownerId = 0;
 };
+
+class FindByOwnerId
+{
+public:
+    bool operator()(const Item* item)
+    {
+        return item->_ownerId == _ownerId;
+    }
+
+public:
+    int _ownerId;
+};
+
+class FindByRarity
+{
+public:
+    bool operator()(const Item* item)
+    {
+        return item->_rarity >= _rarity;
+    }
+
+public:
+    int _rarity;
+};
+
+template<typename T>
+Item* FindItem(Item items[], int itemCount, T selector)
+{
+    for (int i = 0; i < itemCount; i++)
+    {
+        Item* item = &items[i];
+        if (selector(item))
+        {
+            return item;
+        }
+    }
+
+    return nullptr;
+}
 
 #pragma endregion
 
@@ -2799,9 +2959,76 @@ int main()
     // 1) 시그니처가 불일치할 경우 사용 불가
     // 2) 상태를 가질 수 없다
 
-    Functor functor;
-    functor(5);
+    // ()연산자 오버로딩
+    //Functor functor;
+    //functor();
+    //int ret = functor(5);
+
+    //// MMO에서 함수 객체를 사용하는 예시
+    //// 클라 <-> 서버
+    //// 서버: 클라가 보내준 네트워크 패킷을 받아서 처리
+    //// 클라: (5, 0) 좌표로 이동 시켜줘!
+    //MoveTask task;
+    //task._playerId = 100;
+    //task._posX = 5;
+    //task._posY = 0;
+
+    //// 나중에 여유될 때 일감을 실행한다
+    //task();
+
     
+#pragma endregion
+
+#pragma region 템플릿 기초: 함수
+
+    /*Print(50);
+    Print(50.0f);
+    Print(50.0);
+    Print("Hello", 100);
+    Print(Add<int>(100, 100));
+
+    Knight* k1 = new Knight();
+    Print<const Knight&>(*k1);*/
+
+#pragma endregion
+
+#pragma region 템플릿 기초: 클래스
+
+    /*srand(static_cast<unsigned int>(time(nullptr)));
+
+    RandomBox<int, 10> rb1;
+    for (int i = 0; i < 10; i++)
+    {
+        rb1._data[i] = i;
+    }
+    int value1 = rb1.GetRandomData();
+    cout << value1 << endl;
+
+    RandomBox<double, 20> rb2;
+    for (int i = 0; i < 20; i++)
+    {
+        rb2._data[i] = i + 0.5;
+    }
+    double value2 = rb2.GetRandomData();
+    cout << value2 << endl;*/
+
+#pragma endregion
+
+#pragma region 콜백 함수
+
+    Item items[10];
+    items[3]._ownerId = 100;
+    items[8]._rarity = 2;
+
+    FindByOwnerId functor1;
+    functor1._ownerId = 100;
+
+    FindByRarity functor2;
+    functor2._rarity = 1;
+
+    Item* item1 = FindItem(items, 10, functor1);
+    Item* item2 = FindItem(items, 10, functor2);
+
 #pragma endregion
 
 }
