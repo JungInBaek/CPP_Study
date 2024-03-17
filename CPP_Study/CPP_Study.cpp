@@ -1749,52 +1749,239 @@ using namespace std;
 // 어떤 상황이 일어나면 -> 이 기능을 호출해줘
 // ex) UI 스킬 버튼을 누르면 -> 스킬을 쓰는 함수를 호출
 
-class Item
-{
-public:
-    int _itemId = 0;
-    int _rarity = 0;
-    int _ownerId = 0;
-};
+//class Item
+//{
+//public:
+//    int _itemId = 0;
+//    int _rarity = 0;
+//    int _ownerId = 0;
+//};
+//
+//class FindByOwnerId
+//{
+//public:
+//    bool operator()(const Item* item)
+//    {
+//        return item->_ownerId == _ownerId;
+//    }
+//
+//public:
+//    int _ownerId;
+//};
+//
+//class FindByRarity
+//{
+//public:
+//    bool operator()(const Item* item)
+//    {
+//        return item->_rarity >= _rarity;
+//    }
+//
+//public:
+//    int _rarity;
+//};
+//
+//template<typename T>
+//Item* FindItem(Item items[], int itemCount, T selector)
+//{
+//    for (int i = 0; i < itemCount; i++)
+//    {
+//        Item* item = &items[i];
+//        if (selector(item))
+//        {
+//            return item;
+//        }
+//    }
+//
+//    return nullptr;
+//}
 
-class FindByOwnerId
+#pragma endregion
+
+#pragma region vector
+
+//#include <vector>
+
+// STL (Standard Template Library)
+// 프로그래밍할 때 필요한 자료구조/알고리즘들을
+// 템플릿으로 제공하는 라이브러리
+
+// 컨테이너(Container): 데이터를 저장하는 객체 (자료구조 Data Structure)
+
+// vector (동적 배열): 모든 원소가 하나의 메모리 블록에 연속되게 저장된다
+// - vector의 동작 원리 (size/capacity)
+// - 중간 삽입/삭제: 느림
+// - 처음/끝 삽입/삭제: 처음은 느림, 끝은 빠름
+// - 임의 접근 (Random Access): 빠름
+
+// 반복자 (Iterator): 포인터와 유사한 개념. 컨테이너의 원소(데이터)를 가르키고, 다음/이전 원소로 이동 가능
+
+#pragma endregion
+
+#pragma region vector 구현
+
+#include <vector>
+
+template<typename T>
+class Iterator
 {
 public:
-    bool operator()(const Item* item)
+    Iterator() : _ptr(nullptr)
     {
-        return item->_ownerId == _ownerId;
+
+    }
+
+    Iterator(T* ptr) : _ptr(ptr)
+    {
+
+    }
+
+    virtual ~Iterator()
+    {
+
     }
 
 public:
-    int _ownerId;
-};
-
-class FindByRarity
-{
-public:
-    bool operator()(const Item* item)
+    T& operator*()
     {
-        return item->_rarity >= _rarity;
+        return *_ptr;
+    }
+
+    bool operator==(const Iterator& it)
+    {
+        return _ptr == it._ptr;
+    }
+
+    bool operator!=(const Iterator& it)
+    {
+        return _ptr != it._ptr;
+    }
+
+    Iterator operator+(const int count)
+    {
+        Iterator temp = *this;
+        temp._ptr += count;
+        return temp;
+    }
+
+    Iterator operator-(const int count)
+    {
+        Iterator temp = *this;
+        temp._ptr -= count;
+        return temp;
+    }
+
+    Iterator& operator++()
+    {
+        ++_ptr;
+        return *this;
+    }
+
+    Iterator operator++(int)
+    {
+        Iterator temp = *this;
+        _ptr++;
+        return temp;
+    }
+
+    Iterator& operator--()
+    {
+        --_ptr;
+        return *this;
+    }
+
+    Iterator operator--(int)
+    {
+        Iterator temp = *this;
+        _ptr--;
+        return temp;
     }
 
 public:
-    int _rarity;
+    T* _ptr;
 };
 
 template<typename T>
-Item* FindItem(Item items[], int itemCount, T selector)
+class Vector
 {
-    for (int i = 0; i < itemCount; i++)
+public:
+    Vector() : _data(nullptr), _size(0), _capacity(0)
     {
-        Item* item = &items[i];
-        if (selector(item))
+
+    }
+
+    virtual ~Vector()
+    {
+        if (_data)
         {
-            return item;
+            delete[] _data;
         }
     }
 
-    return nullptr;
-}
+    T& operator[](const int index)
+    {
+        return _data[index];
+    }
+
+    void clear()
+    {
+        _size = 0;
+    }
+
+    int size()
+    {
+        return _size;
+    }
+
+    int capacity()
+    {
+        return _capacity;
+    }
+
+    void push_back(const T& value)
+    {
+        if (_capacity == _size)
+        {
+            int newCapacity = static_cast<int>(_capacity * 1.5);
+            if (newCapacity == _capacity)
+            {
+                ++newCapacity;
+            }
+            reserve(newCapacity);
+        }
+        _data[_size++] = value;
+    }
+
+    void reserve(int newCapacity)
+    {
+        _capacity = newCapacity;
+        T* temp = _data;
+        _data = new T[_capacity];
+        for (int i = 0; i < _size; i++)
+        {
+            _data[i] = temp[i];
+        }
+        delete[] temp;
+    }
+
+public:
+    typedef Iterator<T> iterator;
+
+    iterator begin()
+    {
+        return iterator(&_data[0]);
+    }
+
+    iterator end()
+    {
+        return begin() + _size;
+    }
+
+private:
+    T* _data;
+    int _size;
+    int _capacity;
+};
 
 #pragma endregion
 
@@ -3016,7 +3203,7 @@ int main()
 
 #pragma region 콜백 함수
 
-    Item items[10];
+    /*Item items[10];
     items[3]._ownerId = 100;
     items[8]._rarity = 2;
 
@@ -3027,7 +3214,162 @@ int main()
     functor2._rarity = 1;
 
     Item* item1 = FindItem(items, 10, functor1);
-    Item* item2 = FindItem(items, 10, functor2);
+    Item* item2 = FindItem(items, 10, functor2);*/
+
+#pragma endregion
+
+#pragma region vector
+
+    // 배열
+    /*const int MAX_SIZE = 10;
+    int arr[MAX_SIZE] = {};
+
+    for (int i = 0; i < MAX_SIZE; i++)
+    {
+        arr[i] = i;
+    }
+    for (int i = 0; i < MAX_SIZE; i++)
+    {
+        cout << arr[i] << endl;
+    }*/
+
+    // 동적 배열
+    // 매우 중요한 개념 -> 어떻게 배열을 '유동적으로' 사용한 것인가?
+
+    // 1) (여유분을 두고) 메모리를 할당한다
+    // 2) 여유분까지 꽉 찼으면, 메모리를 증설한다
+
+    // Q1) 여유분은 얼마만큼이 적당한가?
+    // Q2) 증설을 얼마만큼 해야하는가?
+    // Q3) 기존의 데이터를 어떻게 처리해야 하는가?
+
+    //vector<int> v(1000, 0);      // std::vector<int> v;
+    //vector<int> v2 = v;      // std::vector<int> v;
+    ////v.resize(1000);     // size 지정
+    //cout << v.size() << " " << v.capacity() << endl;
+    //// size (실제 사용 데이터 개수)
+
+    ////v.reserve(1000);    // capcity 지정
+    //// capacity (여유분을 포함한 총 용량 개수)
+    //for (int i = 0; i < 1000; i++)
+    //{
+    //    //v[i] = 100;
+    //    v.push_back(100);
+    //    cout << v.size() << " " << v.capacity() << endl;
+    //}
+
+    ///*v.front();
+    //v.back();
+    //v.pop_back();*/
+
+    //v.clear();                  // vector 비우기
+    //vector<int>().swap(v);      // 새로운 vector로 치환 (capacity 초기화)
+    //cout << v.size() << " " << v.capacity() << endl;
+
+    // 반복자 (Iterator): 포인터와 유사한 개념. 컨테이너의 원소(데이터)를 가르키고, 다음/이전 원소로 이동 가능
+    /*vector<int> v(10);
+
+    v.reserve(1000);
+
+    for (vector<int>::size_type i = 0; i < v.size(); i++)
+    {
+        v[i] = i;
+    }*/
+
+    /*vector<int>::iterator it;
+    int* ptr;
+
+    it = v.begin();
+    ptr = &v[0];
+
+    cout << (*it) << endl;
+    cout << (*ptr) << endl;*/
+
+    /*it++;
+    ++it;
+    ptr++;
+    ++ptr;
+
+    it--;
+    --it;
+    ptr--;
+    --ptr;
+
+    it += 2;
+    it = it - 2;
+    ptr += 2;
+    ptr = ptr - 2;*/
+
+    /*vector<int>::iterator itBegin = v.begin();
+    vector<int>::iterator itEnd = v.end();*/
+
+    // 다른 컨테이너는 v[i]와 같은 인덱스 접근이 안될 수도 있음
+    // iterator는 vector뿐 아니라, 다른 컨테이너에도 공통적으로 있는 개념
+    //for (vector<int>::iterator it = v.begin(); it != v.end(); ++it)
+    //{
+    //    cout << (*it) << endl;
+    //}
+
+    //int* ptrBegin = v.begin()._Ptr;     // &v[0];
+    //int* ptrEnd = v.end()._Ptr;         // &v[10];
+    //for (int* ptr = ptrBegin; ptr != ptrEnd; ++ptr)
+    //{
+    //    cout << (*ptr) << endl;
+    //}
+
+    //// const int*;
+    //vector<int>::const_iterator cit1 = v.cbegin();
+
+    //for (vector<int>::reverse_iterator rit = v.rbegin(); rit != v.rend(); ++rit)
+    //{
+    //    cout << (*rit) << endl;
+    //}
+    
+    // 중간 삽입/삭제
+    /*vector<int>::iterator insertIt = v.insert(v.begin() + 2, 5);
+    vector<int>::iterator eraseIt1 = v.erase(v.begin() + 2);
+    vector<int>::iterator eraseIt2 = v.erase(v.begin() + 2, v.begin() + 4);*/
+
+    // 전체 스캔하면서 3이라는 데이터만 일괄 삭제
+    //for (vector<int>::iterator it = v.begin(); it != v.end();)
+    //{
+    //    int data = *it;
+    //    if (*it == 3)
+    //    {
+    //        it = v.erase(it);   // 다음 인덱스 리턴
+    //    }
+    //    else
+    //    {
+    //        ++it;
+    //    }
+    //}
+
+#pragma endregion
+
+#pragma region vector 구현
+
+    Vector<int> v;
+    v.reserve(100);
+
+    for (int i = 0; i < 100; i++)
+    {
+        v.push_back(i);
+        cout << v.size() << " " << v.capacity() << endl;
+    }
+
+    for (int i = 0; i < v.size(); i++)
+    {
+        cout << v[i] << endl;
+    }
+
+    cout << "--------------------------" << endl;
+
+    for (Vector<int>::iterator it = v.begin(); it != v.end(); ++it)
+    {
+        cout << (*it) << endl;
+    }
+
+    v.clear();
 
 #pragma endregion
 
