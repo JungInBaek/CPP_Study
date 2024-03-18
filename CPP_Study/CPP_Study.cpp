@@ -1820,18 +1820,232 @@ using namespace std;
 
 #pragma region vector 구현
 
-#include <vector>
+//#include <vector>
+//
+//template<typename T>
+//class Iterator
+//{
+//public:
+//    Iterator() : _ptr(nullptr)
+//    {
+//
+//    }
+//
+//    Iterator(T* ptr) : _ptr(ptr)
+//    {
+//
+//    }
+//
+//    virtual ~Iterator()
+//    {
+//
+//    }
+//
+//public:
+//    T& operator*()
+//    {
+//        return *_ptr;
+//    }
+//
+//    bool operator==(const Iterator& it)
+//    {
+//        return _ptr == it._ptr;
+//    }
+//
+//    bool operator!=(const Iterator& it)
+//    {
+//        return _ptr != it._ptr;
+//    }
+//
+//    Iterator operator+(const int count)
+//    {
+//        Iterator temp = *this;
+//        temp._ptr += count;
+//        return temp;
+//    }
+//
+//    Iterator operator-(const int count)
+//    {
+//        Iterator temp = *this;
+//        temp._ptr -= count;
+//        return temp;
+//    }
+//
+//    Iterator& operator++()
+//    {
+//        ++_ptr;
+//        return *this;
+//    }
+//
+//    Iterator operator++(int)
+//    {
+//        Iterator temp = *this;
+//        _ptr++;
+//        return temp;
+//    }
+//
+//    Iterator& operator--()
+//    {
+//        --_ptr;
+//        return *this;
+//    }
+//
+//    Iterator operator--(int)
+//    {
+//        Iterator temp = *this;
+//        _ptr--;
+//        return temp;
+//    }
+//
+//public:
+//    T* _ptr;
+//};
+//
+//template<typename T>
+//class Vector
+//{
+//public:
+//    Vector() : _data(nullptr), _size(0), _capacity(0)
+//    {
+//
+//    }
+//
+//    virtual ~Vector()
+//    {
+//        if (_data)
+//        {
+//            delete[] _data;
+//        }
+//    }
+//
+//    T& operator[](const int index)
+//    {
+//        return _data[index];
+//    }
+//
+//    void clear()
+//    {
+//        _size = 0;
+//    }
+//
+//    int size()
+//    {
+//        return _size;
+//    }
+//
+//    int capacity()
+//    {
+//        return _capacity;
+//    }
+//
+//    void push_back(const T& value)
+//    {
+//        if (_capacity == _size)
+//        {
+//            int newCapacity = static_cast<int>(_capacity * 1.5);
+//            if (newCapacity == _capacity)
+//            {
+//                ++newCapacity;
+//            }
+//            reserve(newCapacity);
+//        }
+//        _data[_size++] = value;
+//    }
+//
+//    void reserve(int newCapacity)
+//    {
+//        _capacity = newCapacity;
+//        T* temp = _data;
+//        _data = new T[_capacity];
+//        for (int i = 0; i < _size; i++)
+//        {
+//            _data[i] = temp[i];
+//        }
+//        delete[] temp;
+//    }
+//
+//public:
+//    typedef Iterator<T> iterator;
+//
+//    iterator begin()
+//    {
+//        return iterator(&_data[0]);
+//    }
+//
+//    iterator end()
+//    {
+//        return begin() + _size;
+//    }
+//
+//private:
+//    T* _data;
+//    int _size;
+//    int _capacity;
+//};
+
+#pragma endregion
+
+#pragma region list
+
+//#include <list>
+
+// list (연결 리스트)
+// - list의 동작 원리
+// - 중간 삽입/삭제: 빠름
+// - 처음/끝 삽입/삭제: 빠름
+// - 임의 접근: 느림
+
+// 단일 / 이중 / 원형
+
+//class Node
+//{
+//public:
+//    Node* prev;
+//    Node* next;
+//    int _data;
+//};
+
+#pragma endregion
+
+#pragma region list 구현
+
+//#include <list>
+
+template<typename T>
+class Node
+{
+public:
+    Node() : _next(nullptr), _prev(nullptr), _data(T())
+    {
+
+    }
+
+    Node(const T& value) : _next(nullptr), _prev(nullptr), _data(value)
+    {
+
+    }
+
+    virtual ~Node()
+    {
+
+    }
+
+public:
+    Node* _next;
+    Node* _prev;
+    T _data;
+};
 
 template<typename T>
 class Iterator
 {
 public:
-    Iterator() : _ptr(nullptr)
+    Iterator() : _node(nullptr)
     {
 
     }
 
-    Iterator(T* ptr) : _ptr(ptr)
+    Iterator(Node<T>* ptr) : _node(ptr)
     {
 
     }
@@ -1842,90 +2056,109 @@ public:
     }
 
 public:
-    T& operator*()
-    {
-        return *_ptr;
-    }
-
-    bool operator==(const Iterator& it)
-    {
-        return _ptr == it._ptr;
-    }
-
-    bool operator!=(const Iterator& it)
-    {
-        return _ptr != it._ptr;
-    }
-
-    Iterator operator+(const int count)
-    {
-        Iterator temp = *this;
-        temp._ptr += count;
-        return temp;
-    }
-
-    Iterator operator-(const int count)
-    {
-        Iterator temp = *this;
-        temp._ptr -= count;
-        return temp;
-    }
-
     Iterator& operator++()
     {
-        ++_ptr;
+        _node = _node->_next;
         return *this;
     }
 
     Iterator operator++(int)
     {
         Iterator temp = *this;
-        _ptr++;
+        _node = _node->_next;
         return temp;
     }
 
     Iterator& operator--()
     {
-        --_ptr;
+        _node = _node->_prev;
         return *this;
     }
 
     Iterator operator--(int)
     {
         Iterator temp = *this;
-        _ptr--;
+        _node = _node->_prev;
         return temp;
     }
 
+    bool operator==(const Iterator& it)
+    {
+        return _node == it._node;
+    }
+
+    bool operator!=(const Iterator& it)
+    {
+        return _node != it._node;
+    }
+
+    T& operator*()
+    {
+        return _node->_data;
+    }
+
 public:
-    T* _ptr;
+    Node<T>* _node;
 };
 
 template<typename T>
-class Vector
+class List
 {
 public:
-    Vector() : _data(nullptr), _size(0), _capacity(0)
+    List() : _size(0), _header(new Node<T>())
     {
-
+        _header->_next = _header;
+        _header->_prev = _header;
     }
 
-    virtual ~Vector()
+    virtual ~List()
     {
-        if (_data)
+        while (_size > 0)
         {
-            delete[] _data;
+            pop_back();
         }
+        delete _header;
     }
 
-    T& operator[](const int index)
+public:
+    Node<T>* AddNode(Node<T>* before, const T& value)
     {
-        return _data[index];
+        Node<T>* node = new Node<T>(value);
+        Node<T>* prevNode = before->_prev;
+
+        node->_next = before;
+        node->_prev = prevNode;
+
+        prevNode->_next = node;
+        before->_prev = node;
+
+        _size++;
+
+        return node;
     }
 
-    void clear()
+    void push_back(const T& value)
     {
-        _size = 0;
+        AddNode(_header, value);
+    }
+
+    Node<T>* removeNode(Node<T>* node)
+    {
+        Node<T>* prevNode = node->_prev;
+        Node<T>* nextNode = node->_next;
+
+        prevNode->_next = nextNode;
+        nextNode->_prev = prevNode;
+
+        delete node;
+        _size--;
+
+        return nextNode;
+    }
+
+    void pop_back()
+    {
+        removeNode(_header->_prev);
     }
 
     int size()
@@ -1933,54 +2166,34 @@ public:
         return _size;
     }
 
-    int capacity()
-    {
-        return _capacity;
-    }
-
-    void push_back(const T& value)
-    {
-        if (_capacity == _size)
-        {
-            int newCapacity = static_cast<int>(_capacity * 1.5);
-            if (newCapacity == _capacity)
-            {
-                ++newCapacity;
-            }
-            reserve(newCapacity);
-        }
-        _data[_size++] = value;
-    }
-
-    void reserve(int newCapacity)
-    {
-        _capacity = newCapacity;
-        T* temp = _data;
-        _data = new T[_capacity];
-        for (int i = 0; i < _size; i++)
-        {
-            _data[i] = temp[i];
-        }
-        delete[] temp;
-    }
-
 public:
     typedef Iterator<T> iterator;
 
     iterator begin()
     {
-        return iterator(&_data[0]);
+        return iterator(_header->_next);
     }
 
     iterator end()
     {
-        return begin() + _size;
+        return iterator(_header);
+    }
+
+    iterator insert(iterator where, T value)
+    {
+        Node<T>* node = AddNode(where._node, value);
+        return iterator(node);
+    }
+
+    iterator erase(iterator where)
+    {
+        Node<T>* node = removeNode(where._node);
+        return iterator(node);
     }
 
 private:
-    T* _data;
+    Node<T>* _header;
     int _size;
-    int _capacity;
 };
 
 #pragma endregion
@@ -3348,7 +3561,7 @@ int main()
 
 #pragma region vector 구현
 
-    Vector<int> v;
+    /*Vector<int> v;
     v.reserve(100);
 
     for (int i = 0; i < 100; i++)
@@ -3369,7 +3582,88 @@ int main()
         cout << (*it) << endl;
     }
 
-    v.clear();
+    v.clear();*/
+
+#pragma endregion
+
+#pragma region list
+
+    //list<int> li;
+    //
+    //for (int i = 0; i < 100; i++)
+    //{
+    //    li.push_back(i);
+    //}
+    //
+    //int size = li.size();
+    ////li.capacity();  // 없음
+
+    //int first = li.front();
+    //int last = li.back();
+
+    ////li[3] = 10; // 없음
+
+    //list<int>::iterator itBegin = li.begin();
+    //list<int>::iterator itEnd = li.end();
+
+    ////list<int>::iterator itTest1 = --itBegin;  // 불가능
+    ////list<int>::iterator itTest2 = --itEnd;    // 가능
+    ////list<int>::iterator itTest3 = ++itEnd;    // 불가능
+
+    //int* ptrBegin = &li.front();
+    //int* ptrEnd = &li.back();
+
+    //for (list<int>::iterator it = li.begin(); it != li.end(); ++it)
+    //{
+    //    cout << *it << endl;
+    //}
+
+    //li.insert(itBegin, 100);
+
+    //li.erase(itBegin);
+
+    //li.pop_front();
+
+    //li.remove(10);
+
+    //// 50번 인덱스에 있는 데이터를 삭제
+    //list<int>::iterator it = li.begin();
+    //for (int i = 0; i < 50; i++)
+    //{
+    //    ++it;
+    //}
+
+    //// 조회와 삭제의 속도는 분리해서 봐야함
+    //li.erase(it);
+
+#pragma endregion
+
+#pragma region list 구현
+
+    List<int> li;
+
+    List<int>::iterator eraseIt;
+
+    for (int i = 0; i < 10; i++)
+    {
+        if (i == 5)
+        {
+            eraseIt = li.insert(li.end(), i);
+        }
+        else
+        {
+            li.push_back(i);
+        }
+    }
+
+    li.pop_back();
+
+    li.erase(eraseIt);
+    
+    for (List<int>::iterator it = li.begin(); it != li.end(); ++it)
+    {
+        cout << (*it) << endl;
+    }
 
 #pragma endregion
 
