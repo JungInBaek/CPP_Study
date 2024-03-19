@@ -2386,15 +2386,73 @@ using namespace std;
 
 #pragma region deque
 
+//#include <vector>
+//#include <deque>
+
 // 시퀀스 컨테이너 (Sequence Container)
 // 데이터가 삽입 순서대로 나열되는 형태
 // vector list deque
 
 // vector와 마찬가지로 배열 기반으로 동작
-// 다만 메모리 할당 정책이 다르다
+// 다만 메모리 할당 정책이 다름
 
-#include <deque>
-#include <vector>
+// - deque의 동작 원리
+// - 중간 삽입/삭제: 느림
+// - 처음/끝 삽입/삭제: 빠름
+// - 임의 접근: 빠름
+
+#pragma endregion
+
+#pragma region map
+
+//#include <map>
+//
+//class Player
+//{
+//    Player() : _playerId(0)
+//    {
+//
+//    }
+//
+//    Player(int playerId) : _playerId(playerId)
+//    {
+//        
+//    }
+//
+//    virtual ~Player()
+//    {
+//
+//    }
+//
+//public:
+//    int _playerId;
+//};
+//
+//// vector, list의 치명적인 단점
+//// -> 원하는 조건에 해당하는 데이터를 빠르게 찾을 수 없다
+//
+//// 연관 컨테이너
+//// map: 균형 이진 트리 (AVL)
+//// - 노드 기반
+//
+//class Node
+//{
+//public:
+//    Node* _left;
+//    Node* _right;
+//
+//    // DATA
+//    pair<int, Player*> _data;
+//    /*int _key;
+//    Player* _value;*/
+//};
+//
+//template<typename T1, typename T2>
+//struct Pair
+//{
+//    T1 _t1;
+//    T2 _t2;
+//};
 
 #pragma endregion
 
@@ -3875,7 +3933,7 @@ int main()
     dq.push_front(2);
     cout << dq[0] << endl;*/
 
-    vector<int> v(3, 1);
+    /*vector<int> v(3, 1);
     deque<int> dq(3, 1);
 
     v.push_back(2);
@@ -3884,7 +3942,90 @@ int main()
     dq.push_back(2);
 
     dq.push_front(3);
-    dq.push_front(3);
+    dq.push_front(3);*/
+
+#pragma endregion
+
+#pragma region map
+    
+    //srand(static_cast<unsigned int>(time(nullptr)));
+
+    //// (Key, Value)
+    //map<int, int> m;
+
+    //// map 삽입
+    //// 같은 키의 값은 하나만 존재할 수 있다 (같은 키 중복 insert 요청 무시)
+    //pair<map<int, int>::iterator, bool> ok;
+    //ok = m.insert(make_pair(1, 100));
+    //ok = m.insert(make_pair(1, 200));
+
+    //// 10만명 입장
+    //for (int i = 0; i < 100000; i++)
+    //{
+    //    m.insert(pair<int, int>(i, i * 100));
+    //}
+
+    //// map 삭제
+    //// 5만명 랜덤 퇴장
+    //for (int i = 0; i < 50000; i++)
+    //{
+    //    int randomValue = rand() % 100000;
+    //    m.erase(randomValue);
+    //}
+
+    ///*unsigned int count = 0;
+    //count = m.erase(10000);
+    //count = m.erase(10000);*/
+
+    //// map 검색
+    //map<int, int>::iterator findIt = m.find(10000);
+    //if (findIt != m.end())
+    //{
+    //    cout << "찾음" << endl;
+    //}
+    //else
+    //{
+    //    cout << "못 찾음" << endl;
+    //}
+
+    //// map 순회: 순회는 vector보다 느림
+    //// iterator 활용해야 함
+    //for (map<int, int>::iterator it = m.begin(); it != m.end(); ++it)
+    //{
+    //    pair<const int, int>& p = (*it);
+    //    int key = p.first;
+    //    int value = p.second;
+    //    cout << key << " " << value << endl;
+    //}
+
+    //// map 없으면 추가, 있으면 수정
+    //map<int, int>::iterator findIt2 = m.find(10000);
+    //if (findIt2 != m.end())
+    //{
+    //    findIt2->second = 200;
+    //}
+    //else
+    //{
+    //    m.insert(make_pair(10000, 200));
+    //}
+
+    //// map 없으면 추가, 있으면 수정 v2
+    //m[10000] = 500;
+
+    //m.clear();
+
+    //// [] 연산자 사용 시 주의
+    //// 대입을 하지 않더라도 (Key, Value) 형태의 데이터가 추가된다 (기본값이 0으로 세팅된다)
+    //// 값이 있는지 여부를 확인하기 위한 용도라면 find()를 사용하자
+    //for (int i = 0; i < 10; i++)
+    //{
+    //    cout << m[i] << endl;
+    //}
+
+    // 삽입   (insert, [])
+    // 삭제   (erase)
+    // 검색   (find, [])
+    // 반복자 (map<key, value>::iterator) (*it) = pair<key, value>&
 
 #pragma endregion
 
