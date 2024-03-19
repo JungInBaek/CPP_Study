@@ -2011,6 +2011,191 @@ using namespace std;
 
 //#include <list>
 
+//template<typename T>
+//class Node
+//{
+//public:
+//    Node() : _next(nullptr), _prev(nullptr), _data(T())
+//    {
+//
+//    }
+//
+//    Node(const T& value) : _next(nullptr), _prev(nullptr), _data(value)
+//    {
+//
+//    }
+//
+//    virtual ~Node()
+//    {
+//
+//    }
+//
+//public:
+//    Node* _next;
+//    Node* _prev;
+//    T _data;
+//};
+//
+//template<typename T>
+//class Iterator
+//{
+//public:
+//    Iterator() : _node(nullptr)
+//    {
+//
+//    }
+//
+//    Iterator(Node<T>* ptr) : _node(ptr)
+//    {
+//
+//    }
+//
+//    virtual ~Iterator()
+//    {
+//
+//    }
+//
+//public:
+//    Iterator& operator++()
+//    {
+//        _node = _node->_next;
+//        return *this;
+//    }
+//
+//    Iterator operator++(int)
+//    {
+//        Iterator temp = *this;
+//        _node = _node->_next;
+//        return temp;
+//    }
+//
+//    Iterator& operator--()
+//    {
+//        _node = _node->_prev;
+//        return *this;
+//    }
+//
+//    Iterator operator--(int)
+//    {
+//        Iterator temp = *this;
+//        _node = _node->_prev;
+//        return temp;
+//    }
+//
+//    bool operator==(const Iterator& it)
+//    {
+//        return _node == it._node;
+//    }
+//
+//    bool operator!=(const Iterator& it)
+//    {
+//        return _node != it._node;
+//    }
+//
+//    T& operator*()
+//    {
+//        return _node->_data;
+//    }
+//
+//public:
+//    Node<T>* _node;
+//};
+//
+//template<typename T>
+//class List
+//{
+//public:
+//    List() : _size(0), _header(new Node<T>())
+//    {
+//        _header->_next = _header;
+//        _header->_prev = _header;
+//    }
+//
+//    virtual ~List()
+//    {
+//        while (_size > 0)
+//        {
+//            pop_back();
+//        }
+//        delete _header;
+//    }
+//
+//public:
+//    Node<T>* AddNode(Node<T>* before, const T& value)
+//    {
+//        Node<T>* node = new Node<T>(value);
+//        Node<T>* prevNode = before->_prev;
+//
+//        node->_next = before;
+//        node->_prev = prevNode;
+//
+//        prevNode->_next = node;
+//        before->_prev = node;
+//
+//        _size++;
+//
+//        return node;
+//    }
+//
+//    void push_back(const T& value)
+//    {
+//        AddNode(_header, value);
+//    }
+//
+//    Node<T>* removeNode(Node<T>* node)
+//    {
+//        Node<T>* prevNode = node->_prev;
+//        Node<T>* nextNode = node->_next;
+//
+//        prevNode->_next = nextNode;
+//        nextNode->_prev = prevNode;
+//
+//        delete node;
+//        _size--;
+//
+//        return nextNode;
+//    }
+//
+//    void pop_back()
+//    {
+//        removeNode(_header->_prev);
+//    }
+//
+//    int size()
+//    {
+//        return _size;
+//    }
+//
+//public:
+//    typedef Iterator<T> iterator;
+//
+//    iterator begin()
+//    {
+//        return iterator(_header->_next);
+//    }
+//
+//    iterator end()
+//    {
+//        return iterator(_header);
+//    }
+//
+//    iterator insert(iterator where, T value)
+//    {
+//        Node<T>* node = AddNode(where._node, value);
+//        return iterator(node);
+//    }
+//
+//    iterator erase(iterator where)
+//    {
+//        Node<T>* node = removeNode(where._node);
+//        return iterator(node);
+//    }
+//
+//private:
+//    Node<T>* _header;
+//    int _size;
+//};
+
 template<typename T>
 class Node
 {
@@ -2045,7 +2230,7 @@ public:
 
     }
 
-    Iterator(Node<T>* ptr) : _node(ptr)
+    Iterator(Node<T>* node) : _node(node)
     {
 
     }
@@ -2079,7 +2264,7 @@ public:
     {
         Iterator temp = *this;
         _node = _node->_prev;
-        return temp;
+        return *this;
     }
 
     bool operator==(const Iterator& it)
@@ -2105,7 +2290,7 @@ template<typename T>
 class List
 {
 public:
-    List() : _size(0), _header(new Node<T>())
+    List() : _header(new Node<T>()), _size(0)
     {
         _header->_next = _header;
         _header->_prev = _header;
@@ -2120,7 +2305,6 @@ public:
         delete _header;
     }
 
-public:
     Node<T>* AddNode(Node<T>* before, const T& value)
     {
         Node<T>* node = new Node<T>(value);
@@ -2139,10 +2323,10 @@ public:
 
     void push_back(const T& value)
     {
-        AddNode(_header, value);
+        AddNode(_header->_prev, value);
     }
 
-    Node<T>* removeNode(Node<T>* node)
+    Node<T>* removeNode(const Node<T>* node)
     {
         Node<T>* prevNode = node->_prev;
         Node<T>* nextNode = node->_next;
@@ -2176,22 +2360,22 @@ public:
 
     iterator end()
     {
-        return iterator(_header);
+        return iterator(_header->_prev);
     }
 
-    iterator insert(iterator where, T value)
+    iterator insert(const iterator& where, const T& value)
     {
         Node<T>* node = AddNode(where._node, value);
         return iterator(node);
     }
 
-    iterator erase(iterator where)
+    iterator erase(const iterator& where)
     {
         Node<T>* node = removeNode(where._node);
         return iterator(node);
     }
 
-private:
+public:
     Node<T>* _header;
     int _size;
 };
