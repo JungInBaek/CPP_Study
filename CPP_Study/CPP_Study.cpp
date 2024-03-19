@@ -2456,6 +2456,12 @@ using namespace std;
 
 #pragma endregion
 
+#pragma region set, multimap, multiset
+
+#include <map>
+#include <set>
+
+#pragma endregion
 
 int main()
 {
@@ -4026,6 +4032,134 @@ int main()
     // 삭제   (erase)
     // 검색   (find, [])
     // 반복자 (map<key, value>::iterator) (*it) = pair<key, value>&
+
+#pragma endregion
+
+#pragma region set, multimap, multiset
+
+    cout << "------------- set -------------" << endl;
+
+    // (Key = Value)
+    set<int> s;
+
+    // 삽입
+    // 삭제
+    // 검색
+    // 순회
+
+    // 삽입
+    s.insert(10);
+    s.insert(20);
+    s.insert(60);
+    s.insert(40);
+    s.insert(70);
+    s.insert(30);
+    s.insert(90);
+    s.insert(50);
+    s.insert(100);
+    s.insert(80);
+
+    // 삭제
+    s.erase(40);
+
+    // 검색
+    set<int>::iterator findIt = s.find(50);
+    if (findIt == s.end())
+    {
+        cout << "못 찾음" << endl;
+    }
+    else
+    {
+        cout << "찾음" << endl;
+    }
+
+    // 순회
+    for (set<int>::iterator it = s.begin(); it != s.end(); ++it)
+    {
+        cout << (*it) << endl;
+    }
+
+    cout << "------------- multimap -------------" << endl;
+
+    multimap<int, int> mm;
+
+    // 삽입
+    mm.insert(make_pair(1, 100));
+    mm.insert(make_pair(1, 200));
+    mm.insert(make_pair(1, 300));
+    mm.insert(make_pair(2, 400));
+    mm.insert(make_pair(2, 500));
+
+    //mm[1] = 500;  // 사용 불가
+
+    // 삭제
+    //unsigned int count = mm.erase(1);
+
+    // 검색
+    multimap<int, int>::iterator findIt2 = mm.find(2);
+    if (findIt2 != mm.end())
+    {
+        mm.erase(findIt2);
+    }
+
+    // 범위 검색
+    mm.equal_range(1);
+
+    mm.lower_bound(1);
+    mm.upper_bound(1);
+
+    // 순회
+    for (multimap<int, int>::iterator it = mm.begin(); it != mm.end(); ++it)
+    {
+        cout << it->first << " " << it->second << endl;
+    }
+
+    // 부분 순회
+    pair<multimap<int, int>::iterator, multimap<int, int>::iterator> pairIt;
+    pairIt = mm.equal_range(1);
+    for (multimap<int, int>::iterator it = pairIt.first; it != pairIt.second; ++it)
+    {
+        cout << it->first << " " << it->second << endl;
+    }
+
+    multimap<int, int>::iterator beginIt = mm.lower_bound(1);
+    multimap<int, int>::iterator endIt = mm.upper_bound(1);
+    for (multimap<int, int>::iterator it = beginIt; it != endIt; ++it)
+    {
+        cout << it->first << " " << it->second << endl;
+    }
+    
+    cout << "------------- multiset -------------" << endl;
+
+    multiset<int> ms;
+
+    // 삽입
+    ms.insert(100);
+    ms.insert(100);
+    ms.insert(100);
+    ms.insert(200);
+    ms.insert(200);
+
+    // 검색
+    multiset<int>::iterator findIt3 = ms.find(100);  // 첫번째 값만 찾아줌
+
+    // 범위 검색
+    pair<multiset<int>::iterator, multiset<int>::iterator> pairIt2;
+    pairIt2 = ms.equal_range(100);
+
+    multiset<int>::iterator beginIt2 = ms.lower_bound(100);
+    multiset<int>::iterator endIt2 = ms.upper_bound(100);
+
+    // 순회
+    for (multiset<int>::iterator it = pairIt2.first; it != pairIt2.second; ++it)
+    {
+        cout << *it << endl;
+    }
+
+    for (multiset<int>::iterator it = beginIt2; it != endIt2; ++it)
+    {
+        cout << *it << endl;
+    }
 
 #pragma endregion
 
