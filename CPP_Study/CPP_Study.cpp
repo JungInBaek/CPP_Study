@@ -1983,6 +1983,169 @@ using namespace std;
 //    int _capacity;
 //};
 
+
+//template<typename T>
+//class Iterator
+//{
+//public:
+//    Iterator() : _ptr(nullptr)
+//    {
+//
+//    }
+//
+//    Iterator(T* ptr) : _ptr(ptr)
+//    {
+//        
+//    }
+//
+//    virtual ~Iterator()
+//    {
+//
+//    }
+//
+//public:
+//    Iterator operator+(const int& count)
+//    {
+//        Iterator temp = Iterator(_ptr);
+//        temp._ptr + count;
+//        return temp;
+//    }
+//
+//    Iterator operator-(const int& count)
+//    {
+//        Iterator temp = Iterator(_ptr);
+//        temp._ptr - count;
+//        return temp;
+//    }
+//
+//    Iterator& operator++()
+//    {
+//        _ptr++;
+//        return *this;
+//    }
+//
+//    Iterator operator++(int)
+//    {
+//        Iterator temp = *this;
+//        _ptr++;
+//        return temp;
+//    }
+//
+//    Iterator operator--()
+//    {
+//        _ptr--;
+//        return *this;
+//    }
+//
+//    Iterator operator--(int)
+//    {
+//        Iterator temp = *this;
+//        _ptr--;
+//        return temp;
+//    }
+//
+//    bool operator==(const Iterator& it)
+//    {
+//        return _ptr == it._ptr;
+//    }
+//
+//    bool operator!=(const Iterator& it)
+//    {
+//        return _ptr != it._ptr;
+//    }
+//
+//    T& operator*()
+//    {
+//        return *_ptr;
+//    }
+//
+//public:
+//    T* _ptr;
+//};
+//
+//template<typename T>
+//class Vector
+//{
+//public:
+//    Vector() : _data(nullptr), _size(0), _capacity(0)
+//    {
+//        
+//    }
+//
+//    virtual ~Vector()
+//    {
+//        if (_data)
+//        {
+//            delete _data;
+//        }
+//    }
+//
+//public:
+//    T& operator[](int index)
+//    {
+//        return _data[index];
+//    }
+//
+//    void reserve(int newCapacity)
+//    {
+//        _capacity = newCapacity;
+//        T* temp = _data;
+//        _data = new T[_capacity];
+//        for (int i = 0; i < _size; i++)
+//        {
+//            _data[i] = temp[i];
+//        }
+//        delete temp;
+//    }
+//
+//    void push_back(const T& value)
+//    {
+//        if (_size == _capacity)
+//        {
+//            int newCapacity = static_cast<int>(_capacity * 1.5f);
+//            if (newCapacity < 2)
+//            {
+//                newCapacity = 1;
+//            }
+//            reserve(newCapacity);
+//        }
+//        _data[_size++] = value;
+//    }
+//
+//    int size()
+//    {
+//        return _size;
+//    }
+//
+//    int capacity()
+//    {
+//        return _capacity;
+//    }
+//
+//    void clear()
+//    {
+//        _size = 0;
+//    }
+//
+//public:
+//    typedef Iterator<T> iterator;
+//
+//    iterator begin()
+//    {
+//        return iterator(&_data[0]);
+//    }
+//
+//    iterator end()
+//    {
+//        return begin() + _size;
+//    }
+//
+//public:
+//    T* _data;
+//    int _size;
+//    int _capacity;
+//};
+
 #pragma endregion
 
 #pragma region list
@@ -2142,7 +2305,7 @@ using namespace std;
 //        AddNode(_header, value);
 //    }
 //
-//    Node<T>* removeNode(Node<T>* node)
+//    Node<T>* RemoveNode(Node<T>* node)
 //    {
 //        Node<T>* prevNode = node->_prev;
 //        Node<T>* nextNode = node->_next;
@@ -2158,7 +2321,7 @@ using namespace std;
 //
 //    void pop_back()
 //    {
-//        removeNode(_header->_prev);
+//        RemoveNode(_header->_prev);
 //    }
 //
 //    int size()
@@ -2197,29 +2360,28 @@ using namespace std;
 //};
 
 
-// 구현 복습
 //template<typename T>
 //class Node
 //{
 //public:
-//    Node() : _next(nullptr), _prev(nullptr), _data(T())
+//    Node() : _prev(nullptr), _next(nullptr), _data(T())
 //    {
 //
 //    }
 //
-//    Node(const T& value) : _next(nullptr), _prev(nullptr), _data(value)
+//    Node(const T& value) : _prev(nullptr), _next(nullptr), _data(value)
 //    {
 //
 //    }
 //
 //    virtual ~Node()
 //    {
-//
+//        
 //    }
 //
 //public:
-//    Node* _next;
 //    Node* _prev;
+//    Node* _next;
 //    T _data;
 //};
 //
@@ -2258,7 +2420,7 @@ using namespace std;
 //
 //    Iterator& operator--()
 //    {
-//        _node = _node->_prev;
+//        _node = _node->prev;
 //        return *this;
 //    }
 //
@@ -2266,7 +2428,7 @@ using namespace std;
 //    {
 //        Iterator temp = *this;
 //        _node = _node->_prev;
-//        return *this;
+//        return temp;
 //    }
 //
 //    bool operator==(const Iterator& it)
@@ -2294,8 +2456,8 @@ using namespace std;
 //public:
 //    List() : _header(new Node<T>()), _size(0)
 //    {
-//        _header->_next = _header;
 //        _header->_prev = _header;
+//        _header->_next = _header;
 //    }
 //
 //    virtual ~List()
@@ -2307,28 +2469,24 @@ using namespace std;
 //        delete _header;
 //    }
 //
-//    Node<T>* AddNode(Node<T>* before, const T& value)
+//public:
+//    Node<T>* AddNode(Node<T>* where, const T& value)
 //    {
 //        Node<T>* node = new Node<T>(value);
-//        Node<T>* prevNode = before->_prev;
+//        Node<T>* prevNode = where->_prev;
 //
-//        node->_next = before;
 //        node->_prev = prevNode;
+//        node->_next = where;
 //
 //        prevNode->_next = node;
-//        before->_prev = node;
+//        where->_prev = node;
 //
 //        _size++;
 //
 //        return node;
 //    }
 //
-//    void push_back(const T& value)
-//    {
-//        AddNode(_header->_prev, value);
-//    }
-//
-//    Node<T>* removeNode(const Node<T>* node)
+//    Node<T>* RemoveNode(Node<T>* node)
 //    {
 //        Node<T>* prevNode = node->_prev;
 //        Node<T>* nextNode = node->_next;
@@ -2342,9 +2500,14 @@ using namespace std;
 //        return nextNode;
 //    }
 //
+//    void push_back(const T& value)
+//    {
+//        AddNode(_header, value);
+//    }
+//
 //    void pop_back()
 //    {
-//        removeNode(_header->_prev);
+//        RemoveNode(_header->_prev);
 //    }
 //
 //    int size()
@@ -2362,18 +2525,18 @@ using namespace std;
 //
 //    iterator end()
 //    {
-//        return iterator(_header->_prev);
+//        return iterator(_header);
 //    }
 //
-//    iterator insert(const iterator& where, const T& value)
+//    iterator insert(iterator where, T value)
 //    {
 //        Node<T>* node = AddNode(where._node, value);
 //        return iterator(node);
 //    }
 //
-//    iterator erase(const iterator& where)
+//    iterator erase(iterator where)
 //    {
-//        Node<T>* node = removeNode(where._node);
+//        Node<T>* node = RemoveNode(where._node);
 //        return iterator(node);
 //    }
 //
@@ -2458,8 +2621,8 @@ using namespace std;
 
 #pragma region set, multimap, multiset
 
-#include <map>
-#include <set>
+//#include <map>
+//#include <set>
 
 #pragma endregion
 
@@ -4037,129 +4200,129 @@ int main()
 
 #pragma region set, multimap, multiset
 
-    cout << "------------- set -------------" << endl;
+    //cout << "------------- set -------------" << endl;
 
-    // (Key = Value)
-    set<int> s;
+    //// (Key = Value)
+    //set<int> s;
 
-    // 삽입
-    // 삭제
-    // 검색
-    // 순회
+    //// 삽입
+    //// 삭제
+    //// 검색
+    //// 순회
 
-    // 삽입
-    s.insert(10);
-    s.insert(20);
-    s.insert(60);
-    s.insert(40);
-    s.insert(70);
-    s.insert(30);
-    s.insert(90);
-    s.insert(50);
-    s.insert(100);
-    s.insert(80);
+    //// 삽입
+    //s.insert(10);
+    //s.insert(20);
+    //s.insert(60);
+    //s.insert(40);
+    //s.insert(70);
+    //s.insert(30);
+    //s.insert(90);
+    //s.insert(50);
+    //s.insert(100);
+    //s.insert(80);
 
-    // 삭제
-    s.erase(40);
+    //// 삭제
+    //s.erase(40);
 
-    // 검색
-    set<int>::iterator findIt = s.find(50);
-    if (findIt == s.end())
-    {
-        cout << "못 찾음" << endl;
-    }
-    else
-    {
-        cout << "찾음" << endl;
-    }
+    //// 검색
+    //set<int>::iterator findIt = s.find(50);
+    //if (findIt == s.end())
+    //{
+    //    cout << "못 찾음" << endl;
+    //}
+    //else
+    //{
+    //    cout << "찾음" << endl;
+    //}
 
-    // 순회
-    for (set<int>::iterator it = s.begin(); it != s.end(); ++it)
-    {
-        cout << (*it) << endl;
-    }
+    //// 순회
+    //for (set<int>::iterator it = s.begin(); it != s.end(); ++it)
+    //{
+    //    cout << (*it) << endl;
+    //}
 
-    cout << "------------- multimap -------------" << endl;
+    //cout << "------------- multimap -------------" << endl;
 
-    multimap<int, int> mm;
+    //multimap<int, int> mm;
 
-    // 삽입
-    mm.insert(make_pair(1, 100));
-    mm.insert(make_pair(1, 200));
-    mm.insert(make_pair(1, 300));
-    mm.insert(make_pair(2, 400));
-    mm.insert(make_pair(2, 500));
+    //// 삽입
+    //mm.insert(make_pair(1, 100));
+    //mm.insert(make_pair(1, 200));
+    //mm.insert(make_pair(1, 300));
+    //mm.insert(make_pair(2, 400));
+    //mm.insert(make_pair(2, 500));
 
-    //mm[1] = 500;  // 사용 불가
+    ////mm[1] = 500;  // 사용 불가
 
-    // 삭제
-    //unsigned int count = mm.erase(1);
+    //// 삭제
+    ////unsigned int count = mm.erase(1);
 
-    // 검색
-    multimap<int, int>::iterator findIt2 = mm.find(2);
-    if (findIt2 != mm.end())
-    {
-        mm.erase(findIt2);
-    }
+    //// 검색
+    //multimap<int, int>::iterator findIt2 = mm.find(2);
+    //if (findIt2 != mm.end())
+    //{
+    //    mm.erase(findIt2);
+    //}
 
-    // 범위 검색
-    mm.equal_range(1);
+    //// 범위 검색
+    //mm.equal_range(1);
 
-    mm.lower_bound(1);
-    mm.upper_bound(1);
+    //mm.lower_bound(1);
+    //mm.upper_bound(1);
 
-    // 순회
-    for (multimap<int, int>::iterator it = mm.begin(); it != mm.end(); ++it)
-    {
-        cout << it->first << " " << it->second << endl;
-    }
+    //// 순회
+    //for (multimap<int, int>::iterator it = mm.begin(); it != mm.end(); ++it)
+    //{
+    //    cout << it->first << " " << it->second << endl;
+    //}
 
-    // 부분 순회
-    pair<multimap<int, int>::iterator, multimap<int, int>::iterator> pairIt;
-    pairIt = mm.equal_range(1);
-    for (multimap<int, int>::iterator it = pairIt.first; it != pairIt.second; ++it)
-    {
-        cout << it->first << " " << it->second << endl;
-    }
+    //// 부분 순회
+    //pair<multimap<int, int>::iterator, multimap<int, int>::iterator> pairIt;
+    //pairIt = mm.equal_range(1);
+    //for (multimap<int, int>::iterator it = pairIt.first; it != pairIt.second; ++it)
+    //{
+    //    cout << it->first << " " << it->second << endl;
+    //}
 
-    multimap<int, int>::iterator beginIt = mm.lower_bound(1);
-    multimap<int, int>::iterator endIt = mm.upper_bound(1);
-    for (multimap<int, int>::iterator it = beginIt; it != endIt; ++it)
-    {
-        cout << it->first << " " << it->second << endl;
-    }
-    
-    cout << "------------- multiset -------------" << endl;
+    //multimap<int, int>::iterator beginIt = mm.lower_bound(1);
+    //multimap<int, int>::iterator endIt = mm.upper_bound(1);
+    //for (multimap<int, int>::iterator it = beginIt; it != endIt; ++it)
+    //{
+    //    cout << it->first << " " << it->second << endl;
+    //}
+    //
+    //cout << "------------- multiset -------------" << endl;
 
-    multiset<int> ms;
+    //multiset<int> ms;
 
-    // 삽입
-    ms.insert(100);
-    ms.insert(100);
-    ms.insert(100);
-    ms.insert(200);
-    ms.insert(200);
+    //// 삽입
+    //ms.insert(100);
+    //ms.insert(100);
+    //ms.insert(100);
+    //ms.insert(200);
+    //ms.insert(200);
 
-    // 검색
-    multiset<int>::iterator findIt3 = ms.find(100);  // 첫번째 값만 찾아줌
+    //// 검색
+    //multiset<int>::iterator findIt3 = ms.find(100);  // 첫번째 값만 찾아줌
 
-    // 범위 검색
-    pair<multiset<int>::iterator, multiset<int>::iterator> pairIt2;
-    pairIt2 = ms.equal_range(100);
+    //// 범위 검색
+    //pair<multiset<int>::iterator, multiset<int>::iterator> pairIt2;
+    //pairIt2 = ms.equal_range(100);
 
-    multiset<int>::iterator beginIt2 = ms.lower_bound(100);
-    multiset<int>::iterator endIt2 = ms.upper_bound(100);
+    //multiset<int>::iterator beginIt2 = ms.lower_bound(100);
+    //multiset<int>::iterator endIt2 = ms.upper_bound(100);
 
-    // 순회
-    for (multiset<int>::iterator it = pairIt2.first; it != pairIt2.second; ++it)
-    {
-        cout << *it << endl;
-    }
+    //// 순회
+    //for (multiset<int>::iterator it = pairIt2.first; it != pairIt2.second; ++it)
+    //{
+    //    cout << *it << endl;
+    //}
 
-    for (multiset<int>::iterator it = beginIt2; it != endIt2; ++it)
-    {
-        cout << *it << endl;
-    }
+    //for (multiset<int>::iterator it = beginIt2; it != endIt2; ++it)
+    //{
+    //    cout << *it << endl;
+    //}
 
 #pragma endregion
 
