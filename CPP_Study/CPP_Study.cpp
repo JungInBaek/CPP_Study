@@ -2528,7 +2528,7 @@ using namespace std;
 //        return iterator(_header);
 //    }
 //
-//    iterator insert(iterator where, T value)
+//    iterator insert(iterator where, const T& value)
 //    {
 //        Node<T>* node = AddNode(where._node, value);
 //        return iterator(node);
@@ -2623,6 +2623,12 @@ using namespace std;
 
 //#include <map>
 //#include <set>
+
+#pragma endregion
+
+#pragma region 연습 문제
+
+#include <vector>
 
 #pragma endregion
 
@@ -4138,7 +4144,7 @@ int main()
     //// 5만명 랜덤 퇴장
     //for (int i = 0; i < 50000; i++)
     //{
-    //    int randomValue = rand() % 100000;
+    //    int randomValue = rand() % 50000;
     //    m.erase(randomValue);
     //}
 
@@ -4323,6 +4329,111 @@ int main()
     //{
     //    cout << *it << endl;
     //}
+
+#pragma endregion
+
+#pragma region 연습 문제
+
+    srand(static_cast<unsigned int>(time(nullptr)));
+
+    vector<int> v;
+
+    for (int i = 0; i < 100; i++)
+    {
+        int num = rand() % 100;
+        v.push_back(num);
+    }
+
+    // Q1) number라는 숫자가 벡터에 존재하는지 확인 (bool / iterator)
+    {
+        int number = 50;
+
+        bool found = false;
+        vector<int>::iterator it;
+
+        // TODO
+        for (int i = 0; i < v.size(); i++)
+        {
+            if (v[i] == number)
+            {
+                found = true;
+                it = v.begin() + i;
+                break;
+            }
+        }
+
+        for (vector<int>::iterator iter = v.begin(); iter != v.end(); ++iter)
+        {
+            if (*iter == number)
+            {
+                found = true;
+                it = iter;
+                break;
+            }
+        }
+    }
+
+    // Q2) 11로 나뉘는 숫자가 벡터에 존재하는지 확인 (bool / iterator)
+    {
+        bool found = false;
+        vector<int>::iterator it;
+
+        // TODO
+        for (int i = 0; i < v.size(); i++)
+        {
+            if (v[i] % 11 == 0)
+            {
+                found = true;
+                it = v.begin() + i;
+                break;
+            }
+        }
+
+        for (vector<int>::iterator iter = v.begin(); iter != v.end(); ++iter)
+        {
+            if (*iter % 11 == 0)
+            {
+                found = true;
+                it = iter;
+                break;
+            }
+        }
+    }
+
+    // Q3) 홀수인 숫자의 개수 (count)
+    {
+        int count = 0;
+
+        // TODO
+        for (int i = 0; i < v.size(); i++)
+        {
+            if (v[i] % 2 != 0)
+            {
+                count++;
+            }
+        }
+
+        for (vector<int>::iterator iter = v.begin(); iter != v.end(); ++iter)
+        {
+            if (*iter % 2 != 0)
+            {
+                count++;
+            }
+        }
+    }
+
+    // Q4) 벡터에 들어가 있는 모든 숫자들에 3 곱하기
+    {
+        for (int i = 0; i < v.size(); i++)
+        {
+            v[i] *= 3;
+        }
+
+        for (vector<int>::iterator iter = v.begin(); iter != v.end(); ++iter)
+        {
+            *iter *= 3;
+        }
+    }
 
 #pragma endregion
 
