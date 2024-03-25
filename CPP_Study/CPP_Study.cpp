@@ -2779,26 +2779,41 @@ using namespace std;
 // 2) 암묵적인 변환 금지
 
 
-// unscoped enum (범위 없는)
-enum PlayerType : char
-{
-    PT_None,
-    PT_Knight,
-    PT_Archer,
-    PT_Mage
-};
+//// unscoped enum (범위 없는)
+//enum PlayerType : char
+//{
+//    PT_None,
+//    PT_Knight,
+//    PT_Archer,
+//    PT_Mage
+//};
+//
+//enum MonsterType
+//{
+//    MT_None,
+//};
+//
+//// scoped enum
+//enum class ObjectType
+//{
+//    Player,
+//    Monster,
+//    Projectile,
+//};
 
-enum MonsterType
-{
-    MT_None,
-};
+#pragma endregion
 
-// scoped enum
-enum class ObjectType
+#pragma region delete
+
+class Knight
 {
-    Player,
-    Monster,
-    Projectile,
+public:
+    
+private:
+    void operator=(const Knight& k);
+
+private:
+    int _hp = 100;
 };
 
 #pragma endregion
@@ -4917,9 +4932,15 @@ int main()
 
 #pragma region enum class
 
-    // 암묵적인 변환 금지
-    int value = PT_Knight;
-    //int value2 = ObjectType::Player;
+    //// 암묵적인 변환 금지
+    //int value = PT_Knight;
+    ////int value2 = ObjectType::Player;
+
+#pragma endregion
+
+#pragma region delete
+
+
 
 #pragma endregion
 
