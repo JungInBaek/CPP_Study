@@ -2670,25 +2670,79 @@ using namespace std;
 
 #pragma region 중괄호 초기화
 
+//class Knight
+//{
+//public:
+//    Knight()
+//    {
+//
+//    }
+//
+//    Knight(int a, int b)
+//    {
+//        cout << "Knight(int, int)" << endl;
+//    }
+//
+//    Knight(initializer_list<int> li)
+//    {
+//        cout << "Knight(initializer_list)" << endl;
+//    }
+//};
+
+
+#pragma endregion
+
+#pragma region nullptr
+
 class Knight
 {
 public:
-    Knight()
+    void Test()
     {
 
-    }
-
-    Knight(int a, int b)
-    {
-        cout << "Knight(int, int)" << endl;
-    }
-
-    Knight(initializer_list<int> li)
-    {
-        cout << "Knight(initializer_list)" << endl;
     }
 };
 
+Knight* FindKnight()
+{
+    // TODO
+
+    return nullptr;
+}
+
+void Test(int a)
+{
+    cout << "Test(int)" << endl;
+}
+
+void Test(void* ptr)
+{
+    cout << "Test(*)" << endl;
+}
+
+
+// nullptr 구현
+const
+class
+{
+public:
+    // 어떤 타입의 포인터와도 치환 가능
+    template<typename T>
+    operator T* () const
+    {
+        return 0;
+    }
+
+    // 어떤 타입의 멤버 포인터와도 치환 가능
+    template<typename C, typename T>
+    operator T C::* () const
+    {
+        return 0;
+    }
+
+private:
+    void operator&() const; // 주소값 &을 막는다
+} _NullPtr;
 
 #pragma endregion
 
@@ -4718,40 +4772,40 @@ int main()
 
 #pragma region 중괄호 초기화
 
-    int a = 0;
-    int b(0);
-    int c{ 0 };
+    //int a = 0;
+    //int b(0);
+    //int c{ 0 };
 
-    Knight k1;
-    Knight k2 = k1;     // 복사 생성자 (대입 연산자X)
+    //Knight k1;
+    //Knight k2 = k1;     // 복사 생성자 (대입 연산자X)
 
-    Knight k3{ k2 };
+    //Knight k3{ k2 };
 
-    vector<int> v1;
-    v1.push_back(1);
-    v1.push_back(2);
-    v1.push_back(3);
+    //vector<int> v1;
+    //v1.push_back(1);
+    //v1.push_back(2);
+    //v1.push_back(3);
 
-    vector<int> v2(10, 1);
-    int arr[] = { 1, 2, 3, 4 };
-    
+    //vector<int> v2(10, 1);
+    //int arr[] = { 1, 2, 3, 4 };
+    //
 
-    // 중괄호 초기화 장단점
-    // 
-    // 1) vector 등 container와 잘 어울린다
-    vector<int> v3{ 1, 2, 3, 4 };
+    //// 중괄호 초기화 장단점
+    //// 
+    //// 1) vector 등 container와 잘 어울린다
+    //vector<int> v3{ 1, 2, 3, 4 };
 
-    // 2) 축소 변환 방지
-    int x = 0;
-    double y{ x };
+    //// 2) 축소 변환 방지
+    //int x = 0;
+    //double y{ x };
 
-    // 3) 보너스
-    //Knight k4();  // 기본 생성자 호출 x
-    Knight k4{};    // 기본 생성자 호출
-    Knight k5{ 1, 2, 3, 4, 5 };
+    //// 3) 보너스
+    ////Knight k4();  // 기본 생성자 호출 x
+    //Knight k4{};    // 기본 생성자 호출
+    //Knight k5{ 1, 2, 3, 4, 5 };
 
-    // initializer_list 생성자의 호출 우선순위가 높다
-    Knight k5{ 1, 2 };
+    //// initializer_list 생성자의 호출 우선순위가 높다
+    //Knight k5{ 1, 2 };
 
     // 괄호 초기화 ()를 기본으로 사용한다
     // - 전통적인 C++ (거부감이 없음)
@@ -4760,6 +4814,34 @@ int main()
     // 중괄호 초기화 {}를 기본으로 사용한다
     // - 초기화 문법의 일치화
     // - 축소 변환 방지
+
+#pragma endregion
+
+#pragma region nullptr
+
+    // C++11 이전에는 0 or NULL
+    int* ptr = nullptr;
+
+    // 1) 오동작
+    Test(0);
+    Test(NULL);
+    // 위의 두 케이스는 모두 Test(int) 버전이 호출됨
+    Test(nullptr);
+
+    // 2) 가독성
+    auto knight = FindKnight();
+    if (knight == nullptr)
+    {
+
+    }
+
+    void (Knight:: * memFunc)() = &Knight::Test;
+    if (memFunc == nullptr)
+    {
+
+    }
+
+    auto whoami = nullptr;
 
 #pragma endregion
 
