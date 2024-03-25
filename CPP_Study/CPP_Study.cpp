@@ -2694,55 +2694,81 @@ using namespace std;
 
 #pragma region nullptr
 
-class Knight
-{
-public:
-    void Test()
-    {
+//class Knight
+//{
+//public:
+//    void Test()
+//    {
+//
+//    }
+//};
+//
+//Knight* FindKnight()
+//{
+//    // TODO
+//
+//    return nullptr;
+//}
+//
+//void Test(int a)
+//{
+//    cout << "Test(int)" << endl;
+//}
+//
+//void Test(void* ptr)
+//{
+//    cout << "Test(*)" << endl;
+//}
+//
+//
+//// nullptr 구현
+//const
+//class
+//{
+//public:
+//    // 어떤 타입의 포인터와도 치환 가능
+//    template<typename T>
+//    operator T* () const
+//    {
+//        return 0;
+//    }
+//
+//    // 어떤 타입의 멤버 포인터와도 치환 가능
+//    template<typename C, typename T>
+//    operator T C::* () const
+//    {
+//        return 0;
+//    }
+//
+//private:
+//    void operator&() const; // 주소값 &을 막는다
+//} _NullPtr;
 
-    }
+#pragma endregion
+
+#pragma region using
+
+#include <vector>
+#include <list>
+
+typedef vector<int>::iterator VecIt;
+
+typedef int id;
+using id2 = int;
+
+// 1) 직관성
+typedef void (*MyFunc)();
+using MyFunc2 = void(*)();
+
+// 2) 템플릿
+template<typename T>
+using List = std:list<T>;
+
+template<typename T>
+struct List2
+{
+    typedef std::list<T> type;
 };
-
-Knight* FindKnight()
-{
-    // TODO
-
-    return nullptr;
-}
-
-void Test(int a)
-{
-    cout << "Test(int)" << endl;
-}
-
-void Test(void* ptr)
-{
-    cout << "Test(*)" << endl;
-}
-
-
-// nullptr 구현
-const
-class
-{
-public:
-    // 어떤 타입의 포인터와도 치환 가능
-    template<typename T>
-    operator T* () const
-    {
-        return 0;
-    }
-
-    // 어떤 타입의 멤버 포인터와도 치환 가능
-    template<typename C, typename T>
-    operator T C::* () const
-    {
-        return 0;
-    }
-
-private:
-    void operator&() const; // 주소값 &을 막는다
-} _NullPtr;
 
 #pragma endregion
 
@@ -4819,29 +4845,35 @@ int main()
 
 #pragma region nullptr
 
-    // C++11 이전에는 0 or NULL
-    int* ptr = nullptr;
+    //// C++11 이전에는 0 or NULL
+    //int* ptr = nullptr;
 
-    // 1) 오동작
-    Test(0);
-    Test(NULL);
-    // 위의 두 케이스는 모두 Test(int) 버전이 호출됨
-    Test(nullptr);
+    //// 1) 오동작
+    //Test(0);
+    //Test(NULL);
+    //// 위의 두 케이스는 모두 Test(int) 버전이 호출됨
+    //Test(nullptr);
 
-    // 2) 가독성
-    auto knight = FindKnight();
-    if (knight == nullptr)
-    {
+    //// 2) 가독성
+    //auto knight = FindKnight();
+    //if (knight == nullptr)
+    //{
 
-    }
+    //}
 
-    void (Knight:: * memFunc)() = &Knight::Test;
-    if (memFunc == nullptr)
-    {
+    //void (Knight:: * memFunc)() = &Knight::Test;
+    //if (memFunc == nullptr)
+    //{
 
-    }
+    //}
 
-    auto whoami = nullptr;
+    //auto whoami = nullptr;
+
+#pragma endregion
+
+#pragma region using
+
+
 
 #pragma endregion
 
