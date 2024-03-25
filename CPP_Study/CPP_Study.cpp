@@ -2748,26 +2748,57 @@ using namespace std;
 
 #pragma region using
 
-#include <vector>
-#include <list>
+//#include <vector>
+//#include <list>
+//
+//typedef vector<int>::iterator VecIt;
+//
+//typedef int id;
+//using id2 = int;
+//
+//// 1) 직관성
+//typedef void (*MyFunc)();
+//using MyFunc2 = void(*)();
+//
+//// 2) 템플릿
+//template<typename T>
+//using List = std:list<T>;
+//
+//template<typename T>
+//struct List2
+//{
+//    typedef std::list<T> type;
+//};
 
-typedef vector<int>::iterator VecIt;
+#pragma endregion
 
-typedef int id;
-using id2 = int;
+#pragma region enum class
 
-// 1) 직관성
-typedef void (*MyFunc)();
-using MyFunc2 = void(*)();
+// enum class (scoped enum)
+// 1) 이름공간 관리 (scoped)
+// 2) 암묵적인 변환 금지
 
-// 2) 템플릿
-template<typename T>
-using List = std:list<T>;
 
-template<typename T>
-struct List2
+// unscoped enum (범위 없는)
+enum PlayerType : char
 {
-    typedef std::list<T> type;
+    PT_None,
+    PT_Knight,
+    PT_Archer,
+    PT_Mage
+};
+
+enum MonsterType
+{
+    MT_None,
+};
+
+// scoped enum
+enum class ObjectType
+{
+    Player,
+    Monster,
+    Projectile,
 };
 
 #pragma endregion
@@ -4873,7 +4904,22 @@ int main()
 
 #pragma region using
 
+    /*id playerId = 0;
 
+    List<int> li;
+    li.push_back(1);
+    li.push_back(2);
+    li.push_back(3);
+
+    List2<int>::type li2;*/
+
+#pragma endregion
+
+#pragma region enum class
+
+    // 암묵적인 변환 금지
+    int value = PT_Knight;
+    //int value2 = ObjectType::Player;
 
 #pragma endregion
 
