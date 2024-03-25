@@ -2805,15 +2805,58 @@ using namespace std;
 
 #pragma region delete
 
-class Knight
+//class Knight
+//{
+//public:
+//    
+//public:
+//    void operator=(const Knight& k) = delete;
+//
+//private:
+//    int _hp = 100;
+//};
+
+#pragma endregion
+
+#pragma region override, final
+
+class Creature
 {
 public:
-    
-private:
-    void operator=(const Knight& k);
+    virtual void Attack()
+    {
+        cout << "Creature!" << endl;
+    }
+};
+
+class Player : public Creature
+{
+public:
+    // 오버라이드 (Override): 함수 재정의
+    virtual void Attack() override
+    {
+        cout << "Player!" << endl;
+    }
+};
+
+class Knight : public Player
+{
+public:
+    // 오버라이드 (Override): 함수 재정의
+    virtual void Attack() const     // const = readonly 함수로 만들어줌
+    {
+        cout << "Knight!" << endl;
+    }
+
+    virtual void Attack() final     // final = Override 금지
+    {
+        cout << "Knight!" << endl;
+    }
+
+    // 오버로딩 (Overloading): 함수 이름 재사용
 
 private:
-    int _hp = 100;
+    int _stamina = 100;
 };
 
 #pragma endregion
@@ -4940,7 +4983,17 @@ int main()
 
 #pragma region delete
 
+    //Knight k1;
+    //Knight k2;
 
+    ////k1 = k2;
+
+#pragma endregion
+
+#pragma region override, final
+
+    Player* player = new Knight();
+    player->Attack();
 
 #pragma endregion
 
