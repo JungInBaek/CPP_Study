@@ -2634,8 +2634,8 @@ using namespace std;
 
 #pragma region 알고리즘
 
-#include <vector>
-#include <algorithm>
+//#include <vector>
+//#include <algorithm>
 
 // 자료구조: 데이터를 저장하는 구조
 // 알고리즘: 데이터를 어떻게 사용할 것인가
@@ -2650,6 +2650,21 @@ using namespace std;
 // for_each
 // remove
 // remove_if
+
+#pragma endregion
+
+#pragma region auto
+
+#include <vector>
+#include <map>
+
+// Modern C++ (C++11)
+
+class Knight
+{
+public:
+    int _hp;
+};
 
 #pragma endregion
 
@@ -4460,165 +4475,219 @@ int main()
 
 #pragma region 알고리즘
 
-srand(static_cast<unsigned int>(time(nullptr)));
+//srand(static_cast<unsigned int>(time(nullptr)));
+//
+//    vector<int> v;
+//
+//    for (int i = 0; i < 100; i++)
+//    {
+//        int num = rand() % 100;
+//        v.push_back(num);
+//    }
+//
+//
+//    // Q1) number라는 숫자가 벡터에 존재하는지 확인 (bool / iterator)
+//    {
+//        int number = 50;
+//
+//        bool found = false;
+//        vector<int>::iterator it;
+//
+//        // TODO
+//        for (int i = 0; i < v.size(); i++)
+//        {
+//            if (v[i] == number)
+//            {
+//                found = true;
+//                it = v.begin() + i;
+//                break;
+//            }
+//        }
+//
+//        // std::find()
+//        vector<int>::iterator findIter = find(v.begin(), v.end(), number);
+//        if (findIter == v.end())
+//        {
+//            cout << "못 찾았음" << endl;
+//        }
+//        else
+//        {
+//            cout << "찾았음" << endl;
+//        }
+//    }
+//
+//
+//    // Q2) 11로 나뉘는 숫자가 벡터에 존재하는지 확인 (bool / iterator)
+//    {
+//        bool found = false;
+//        vector<int>::iterator it;
+//
+//        // TODO
+//        for (int i = 0; i < v.size(); i++)
+//        {
+//            if (v[i] % 11 == 0)
+//            {
+//                found = true;
+//                it = v.begin() + i;
+//                break;
+//            }
+//        }
+//
+//
+//        struct CanDivideBy11
+//        {
+//            bool operator()(int n)
+//            {
+//                return n % 11 == 0;
+//            }
+//        };
+//
+//        // std::find_if()
+//        vector<int>::iterator findIter = find_if(v.begin(), v.end(), CanDivideBy11());      // 람다식: [](int n) { return n % 11 == 0; }
+//        if (findIter == v.end())
+//        {
+//            cout << "못 찾았음" << endl;
+//        }
+//        else
+//        {
+//            cout << "찾았음" << endl;
+//        }
+//    }
+//
+//
+//    // Q3) 홀수인 숫자의 개수 (count)
+//    {
+//        int count = 0;
+//
+//        // TODO
+//        for (int i = 0; i < v.size(); i++)
+//        {
+//            if (v[i] % 2 != 0)
+//            {
+//                count++;
+//            }
+//        }
+//
+//
+//        struct IsOdd
+//        {
+//            bool operator()(int n)
+//            {
+//                return n % 2 != 0;
+//            }
+//        };
+//
+//        // std::count_if()
+//        count = count_if(v.begin(), v.end(), IsOdd());
+//
+//
+//        // 모든 데이터 홀수?
+//        bool b1 = all_of(v.begin(), v.end(), IsOdd());
+//
+//        // 홀수인 데이터가 하나라도 존재?
+//        bool b2 = any_of(v.begin(), v.end(), IsOdd());
+//
+//        // 모든 데이터가 홀수가 아닌가?
+//        bool b3 = none_of(v.begin(), v.end(), IsOdd());
+//    }
+//
+//
+//    // Q4) 벡터에 들어가 있는 모든 숫자들에 3 곱하기
+//    {
+//        for (int i = 0; i < v.size(); i++)
+//        {
+//            v[i] *= 3;
+//        }
+//
+//
+//        struct MultiplyBy3
+//        {
+//            void operator()(int& n)
+//            {
+//                n *= 3;
+//            }
+//        };
+//
+//        // std::for_each()
+//        for_each(v.begin(), v.end(), MultiplyBy3());
+//    }
+//
+//    v.clear();
+//
+//    v.push_back(1);
+//    v.push_back(4);
+//    v.push_back(3);
+//    v.push_back(5);
+//    v.push_back(8);
+//    v.push_back(2);
+//
+//    // 홀수인 데이터를 일괄 삭제
+//    {
+//        struct IsOdd
+//        {
+//            bool operator()(int n)
+//            {
+//                return n % 2 != 0;
+//            }
+//        };
+//
+//        vector<int>::iterator removeIter = remove_if(v.begin(), v.end(), IsOdd());
+//        v.erase(removeIter, v.end());
+//        //v.erase(remove_if(v.begin(), v.end(), IsOdd()), v.end());
+//    }
+
+#pragma endregion
+
+#pragma region auto
+
+    /*int a = 3;
+    float b = 3.14f;
+    double c = 1.23;
+    Knight d = Knight();
+    const char* e = "문자열";*/
+
+    auto a = 3;
+    auto b = 3.14f;
+    auto c = 1.23;
+    auto d = Knight();
+    auto e = "문자열";
+
+    // auto는 일종의 조커카드
+    // 형식 연역 (type deduction)
+    // 컴파일러가 추론
+    // 추론 규칙은 생각보다 복잡해질 수 있다
+
+    auto f = &d;
+    const auto test1 = b;
+    auto* test2 = e;
+
+    // 주의사항
+    // 기본 auto는 const, & 무시한다
+    int& reference = a;
+    const int cst = a;
+
+    auto test3 = reference;
+    auto test4 = cst;
 
     vector<int> v;
-
-    for (int i = 0; i < 100; i++)
-    {
-        int num = rand() % 100;
-        v.push_back(num);
-    }
-
-
-    // Q1) number라는 숫자가 벡터에 존재하는지 확인 (bool / iterator)
-    {
-        int number = 50;
-
-        bool found = false;
-        vector<int>::iterator it;
-
-        // TODO
-        for (int i = 0; i < v.size(); i++)
-        {
-            if (v[i] == number)
-            {
-                found = true;
-                it = v.begin() + i;
-                break;
-            }
-        }
-
-        // std::find()
-        vector<int>::iterator findIter = find(v.begin(), v.end(), number);
-        if (findIter == v.end())
-        {
-            cout << "못 찾았음" << endl;
-        }
-        else
-        {
-            cout << "찾았음" << endl;
-        }
-    }
-
-
-    // Q2) 11로 나뉘는 숫자가 벡터에 존재하는지 확인 (bool / iterator)
-    {
-        bool found = false;
-        vector<int>::iterator it;
-
-        // TODO
-        for (int i = 0; i < v.size(); i++)
-        {
-            if (v[i] % 11 == 0)
-            {
-                found = true;
-                it = v.begin() + i;
-                break;
-            }
-        }
-
-
-        struct CanDivideBy11
-        {
-            bool operator()(int n)
-            {
-                return n % 11 == 0;
-            }
-        };
-
-        // std::find_if()
-        vector<int>::iterator findIter = find_if(v.begin(), v.end(), CanDivideBy11());      // 람다식: [](int n) { return n % 11 == 0; }
-        if (findIter == v.end())
-        {
-            cout << "못 찾았음" << endl;
-        }
-        else
-        {
-            cout << "찾았음" << endl;
-        }
-    }
-
-
-    // Q3) 홀수인 숫자의 개수 (count)
-    {
-        int count = 0;
-
-        // TODO
-        for (int i = 0; i < v.size(); i++)
-        {
-            if (v[i] % 2 != 0)
-            {
-                count++;
-            }
-        }
-
-
-        struct IsOdd
-        {
-            bool operator()(int n)
-            {
-                return n % 2 != 0;
-            }
-        };
-
-        // std::count_if()
-        count = count_if(v.begin(), v.end(), IsOdd());
-
-
-        // 모든 데이터 홀수?
-        bool b1 = all_of(v.begin(), v.end(), IsOdd());
-
-        // 홀수인 데이터가 하나라도 존재?
-        bool b2 = any_of(v.begin(), v.end(), IsOdd());
-
-        // 모든 데이터가 홀수가 아닌가?
-        bool b3 = none_of(v.begin(), v.end(), IsOdd());
-    }
-
-
-    // Q4) 벡터에 들어가 있는 모든 숫자들에 3 곱하기
-    {
-        for (int i = 0; i < v.size(); i++)
-        {
-            v[i] *= 3;
-        }
-
-
-        struct MultiplyBy3
-        {
-            void operator()(int& n)
-            {
-                n *= 3;
-            }
-        };
-
-        // std::for_each()
-        for_each(v.begin(), v.end(), MultiplyBy3());
-    }
-
-    v.clear();
-
     v.push_back(1);
-    v.push_back(4);
-    v.push_back(3);
-    v.push_back(5);
-    v.push_back(8);
     v.push_back(2);
+    v.push_back(3);
 
-    // 홀수인 데이터를 일괄 삭제
+    for (vector<int>::size_type i = 0; i < v.size(); i++)
     {
-        struct IsOdd
-        {
-            bool operator()(int n)
-            {
-                return n % 2 != 0;
-            }
-        };
+        auto& data = v[i];
+        data = 100;
+    }
 
-        vector<int>::iterator removeIter = remove_if(v.begin(), v.end(), IsOdd());
-        v.erase(removeIter, v.end());
-        //v.erase(remove_if(v.begin(), v.end(), IsOdd()), v.end());
+    // 타입이 길어지는 경우 유용
+    // 가독성을 위해 일반적인 상황에서는 사용x
+    map<int, int> m;
+    auto ok = m.insert(make_pair(1, 100));
+
+    for (auto it = v.begin(); it != v.end(); ++it)
+    {
+        cout << *it << endl;
     }
 
 #pragma endregion
