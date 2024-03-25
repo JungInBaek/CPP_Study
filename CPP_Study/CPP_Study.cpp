@@ -2660,11 +2660,35 @@ using namespace std;
 
 // Modern C++ (C++11)
 
+//class Knight
+//{
+//public:
+//    int _hp;
+//};
+
+#pragma endregion
+
+#pragma region 중괄호 초기화
+
 class Knight
 {
 public:
-    int _hp;
+    Knight()
+    {
+
+    }
+
+    Knight(int a, int b)
+    {
+        cout << "Knight(int, int)" << endl;
+    }
+
+    Knight(initializer_list<int> li)
+    {
+        cout << "Knight(initializer_list)" << endl;
+    }
 };
+
 
 #pragma endregion
 
@@ -4646,49 +4670,96 @@ int main()
     Knight d = Knight();
     const char* e = "문자열";*/
 
-    auto a = 3;
-    auto b = 3.14f;
-    auto c = 1.23;
-    auto d = Knight();
-    auto e = "문자열";
+    //auto a = 3;
+    //auto b = 3.14f;
+    //auto c = 1.23;
+    //auto d = Knight();
+    //auto e = "문자열";
 
-    // auto는 일종의 조커카드
-    // 형식 연역 (type deduction)
-    // 컴파일러가 추론
-    // 추론 규칙은 생각보다 복잡해질 수 있다
+    //// auto는 일종의 조커카드
+    //// 형식 연역 (type deduction)
+    //// 컴파일러가 추론
+    //// 추론 규칙은 생각보다 복잡해질 수 있다
 
-    auto f = &d;
-    const auto test1 = b;
-    auto* test2 = e;
+    //auto f = &d;
+    //const auto test1 = b;
+    //auto* test2 = e;
 
-    // 주의사항
-    // 기본 auto는 const, & 무시한다
-    int& reference = a;
-    const int cst = a;
+    //// 주의사항
+    //// 기본 auto는 const, & 무시한다
+    //int& reference = a;
+    //const int cst = a;
 
-    auto test3 = reference;
-    auto test4 = cst;
+    //auto test3 = reference;
+    //auto test4 = cst;
 
-    vector<int> v;
-    v.push_back(1);
-    v.push_back(2);
-    v.push_back(3);
+    //vector<int> v;
+    //v.push_back(1);
+    //v.push_back(2);
+    //v.push_back(3);
 
-    for (vector<int>::size_type i = 0; i < v.size(); i++)
-    {
-        auto& data = v[i];
-        data = 100;
-    }
+    //for (vector<int>::size_type i = 0; i < v.size(); i++)
+    //{
+    //    auto& data = v[i];
+    //    data = 100;
+    //}
 
-    // 타입이 길어지는 경우 유용
-    // 가독성을 위해 일반적인 상황에서는 사용x
-    map<int, int> m;
-    auto ok = m.insert(make_pair(1, 100));
+    //// 타입이 길어지는 경우 유용
+    //// 가독성을 위해 일반적인 상황에서는 사용x
+    //map<int, int> m;
+    //auto ok = m.insert(make_pair(1, 100));
 
-    for (auto it = v.begin(); it != v.end(); ++it)
-    {
-        cout << *it << endl;
-    }
+    //for (auto it = v.begin(); it != v.end(); ++it)
+    //{
+    //    cout << *it << endl;
+    //}
+
+#pragma endregion
+
+#pragma region 중괄호 초기화
+
+    int a = 0;
+    int b(0);
+    int c{ 0 };
+
+    Knight k1;
+    Knight k2 = k1;     // 복사 생성자 (대입 연산자X)
+
+    Knight k3{ k2 };
+
+    vector<int> v1;
+    v1.push_back(1);
+    v1.push_back(2);
+    v1.push_back(3);
+
+    vector<int> v2(10, 1);
+    int arr[] = { 1, 2, 3, 4 };
+    
+
+    // 중괄호 초기화 장단점
+    // 
+    // 1) vector 등 container와 잘 어울린다
+    vector<int> v3{ 1, 2, 3, 4 };
+
+    // 2) 축소 변환 방지
+    int x = 0;
+    double y{ x };
+
+    // 3) 보너스
+    //Knight k4();  // 기본 생성자 호출 x
+    Knight k4{};    // 기본 생성자 호출
+    Knight k5{ 1, 2, 3, 4, 5 };
+
+    // initializer_list 생성자의 호출 우선순위가 높다
+    Knight k5{ 1, 2 };
+
+    // 괄호 초기화 ()를 기본으로 사용한다
+    // - 전통적인 C++ (거부감이 없음)
+    // - vector 등 특이 케이스에만 {} 사용
+
+    // 중괄호 초기화 {}를 기본으로 사용한다
+    // - 초기화 문법의 일치화
+    // - 축소 변환 방지
 
 #pragma endregion
 
