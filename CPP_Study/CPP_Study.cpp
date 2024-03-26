@@ -2867,100 +2867,150 @@ using namespace std;
 // - lvalue: 단일식을 넘어서 계속 지속되는 개체
 // - rvalue: lvalue가 아닌 나머지 (임시 값, 열거형, 람다, i++ 등)
 
-class Pet
-{
+//class Pet
+//{
+//
+//};
+//
+//class Knight
+//{
+//public:
+//    Knight()
+//    {
+//        cout << "Knight()" << endl;
+//    }
+//
+//    // 복사 생성자
+//    Knight(const Knight& knight)
+//    {
+//        cout << "Knight(const Knight&)" << endl;
+//    }
+//
+//    virtual ~Knight()
+//    {
+//        if (_pet)
+//        {
+//            delete _pet;
+//        }
+//    }
+//
+//    // 이동 생성자
+//    Knight(Knight&& knight) noexcept
+//    {
+//        cout << "Knight(Knight&&)" << endl;
+//
+//    }
+//
+//    // 복사 대입 연산자
+//    void operator=(const Knight& knight)
+//    {
+//        cout << "operator=(const Knight&)" << endl;
+//
+//        _hp = knight._hp;
+//
+//        // 깊은 복사
+//        if (knight._pet)
+//        {
+//            _pet = new Pet(*knight._pet);
+//        }
+//    }
+//
+//    // 이동 대입 연산자
+//    void operator=(Knight&& knight) noexcept
+//    {
+//        cout << "operator=(Knight&& knight)" << endl;
+//
+//        // 얕은 복사
+//        _hp = knight._hp;
+//        _pet = knight._pet;
+//
+//        knight._pet = nullptr;
+//    }
+//
+//public:
+//    void PrintInfo() const
+//    {
+//        cout << "hp: " << _hp << endl;
+//    }
+//
+//public:
+//    int _hp = 100;
+//    Pet* _pet = nullptr;
+//};
+//
+//
+//void TestKnight_Copy(Knight knight)
+//{
+//    knight._hp = 200;
+//}
+//
+//void TestKnight_LValueRef(Knight& knight)
+//{
+//    knight._hp = 200;
+//}
+//
+//void TestKnight_ConstLValueRef(const Knight& knight)
+//{
+//    knight.PrintInfo();
+//}
+//
+//void TestKnight_RValueRef(Knight&& knight)      // 이동 대상
+//{
+//    // &&는 원본을 유지하지 않아도 된다는 힌트
+//}
 
-};
+#pragma endregion
+
+#pragma region 전달 참조 (forward*ing reference)
+
+// 보편 참조(universal reference)
+// 전달 참조(forwarding reference) C++17
+
+// && -> 오른값 참조
 
 class Knight
 {
 public:
     Knight()
     {
-        cout << "Knight()" << endl;
+        cout << "기본 생성자" << endl;
     }
 
-    // 복사 생성자
     Knight(const Knight& knight)
     {
-        cout << "Knight(const Knight&)" << endl;
+        cout << "복사 생성자" << endl;
     }
 
-    virtual ~Knight()
-    {
-        if (_pet)
-        {
-            delete _pet;
-        }
-    }
-
-    // 이동 생성자
     Knight(Knight&& knight) noexcept
     {
-        cout << "Knight(Knight&&)" << endl;
-
+        cout << "이동 생성자" << endl;
     }
-
-    // 복사 대입 연산자
-    void operator=(const Knight& knight)
-    {
-        cout << "operator=(const Knight&)" << endl;
-
-        _hp = knight._hp;
-
-        // 깊은 복사
-        if (knight._pet)
-        {
-            _pet = new Pet(*knight._pet);
-        }
-    }
-
-    // 이동 대입 연산자
-    void operator=(Knight&& knight) noexcept
-    {
-        cout << "operator=(Knight&& knight)" << endl;
-
-        // 얕은 복사
-        _hp = knight._hp;
-        _pet = knight._pet;
-
-        knight._pet = nullptr;
-    }
-
-public:
-    void PrintInfo() const
-    {
-        cout << "hp: " << _hp << endl;
-    }
-
-public:
-    int _hp = 100;
-    Pet* _pet = nullptr;
 };
 
-
-void TestKnight_Copy(Knight knight)
+void Test_RValueRef(Knight&& knight)
 {
-    knight._hp = 200;
+
 }
 
-void TestKnight_LValueRef(Knight& knight)
+void Test_Copy(Knight k)
 {
-    knight._hp = 200;
+
 }
 
-void TestKnight_ConstLValueRef(const Knight& knight)
+template<typename T>
+void Test_ForwardingRef(T&& param)  // 전달 참조: 왼값 or 오른값 중 하나를 받아줌
 {
-    knight.PrintInfo();
-}
+    // 왼값 참조라면 복사
+    //Test_Copy(param);
 
-void TestKnight_RValueRef(Knight&& knight)      // 이동 대상
-{
-    // 원본을 유지하지 않아도 된다는 힌트
+    // 오른값 참조라면 이동
+    //Test_Copy(std::move(param));
 
+    Test_Copy(std::forward<T>(param));
 }
 
 #pragma endregion
+
 
 int main()
 {
@@ -5102,26 +5152,55 @@ int main()
 
     //int a = 3;
 
+    //Knight k1;
+    //TestKnight_Copy(k1);
+    //TestKnight_LValueRef(k1);
+    //TestKnight_ConstLValueRef(Knight());
+    //TestKnight_RValueRef(Knight());
+    //TestKnight_RValueRef(static_cast<Knight&&>(k1));
+
+    //Knight k2;
+    //k2._pet = new Pet();
+    //k2._hp = 1000;
+
+    //// &&는 원본은 날려도 된다는 힌트를 준다
+    //Knight k3;
+    ////k3 = static_cast<Knight&&>(k2);
+
+    //k3 = std::move(k2);     // 오른값 참조로 캐스팅
+    //// std::move의 본래 이름 후보 중 하나가 ravlue_cast
+
+    //std::unique_ptr<Knight> uptr = std::make_unique<Knight>();
+    //std::unique_ptr<Knight> uptr2 = std::move(uptr);
+
+#pragma endregion
+
+#pragma region 전달 참조 (forward*ing reference)
+
     Knight k1;
-    TestKnight_Copy(k1);
-    TestKnight_LValueRef(k1);
-    TestKnight_ConstLValueRef(Knight());
-    TestKnight_RValueRef(Knight());
-    TestKnight_RValueRef(static_cast<Knight&&>(k1));
 
-    Knight k2;
-    k2._pet = new Pet();
-    k2._hp = 1000;
+    Test_RValueRef(std::move(k1));
 
-    // &&는 원본은 날려도 된다는 힌트를 준다
-    Knight k3;
-    //k3 = static_cast<Knight&&>(k2);
+    Test_ForwardingRef(k1);
+    Test_ForwardingRef(std::move(k1));
 
-    k3 = std::move(k2);     // 오른값 참조로 캐스팅
-    // std::move의 본래 이름 후보 중 하나가 ravlue_cast
+    auto&& k2 = k1;
+    auto&& k3 = std::move(k1);
 
-    std::unique_ptr<Knight> uptr = std::make_unique<Knight>();
-    std::unique_ptr<Knight> uptr2 = std::move(uptr);
+    // 전달 참조를 구별하는 방법
+    // 공통점: 형식 연혁(Type Deduction)이 일어날 때
+
+    // ---------------------------------------------------
+
+    Knight& k4 = k1;                // 왼값 참조
+    Knight&& k5 = std::move(k1);    // 오른값 참조
+
+    // 오른값: 왼값이 아닌 값 = 단일식에서 벗어나면 사용 x
+    // 오른값 참조: 오른값만 참조할 수 있는 참조 타입
+    //Test_RValueRef(std::move(k5));
+
+    Test_ForwardingRef(k1);
+    Test_ForwardingRef(std::move(k1));
 
 #pragma endregion
 
