@@ -2820,44 +2820,145 @@ using namespace std;
 
 #pragma region override, final
 
-class Creature
+//class Creature
+//{
+//public:
+//    virtual void Attack()
+//    {
+//        cout << "Creature!" << endl;
+//    }
+//};
+//
+//class Player : public Creature
+//{
+//public:
+//    // 오버라이드 (Override): 함수 재정의
+//    virtual void Attack() override
+//    {
+//        cout << "Player!" << endl;
+//    }
+//};
+//
+//class Knight : public Player
+//{
+//public:
+//    // 오버라이드 (Override): 함수 재정의
+//    virtual void Attack() const     // const = readonly 함수로 만들어줌
+//    {
+//        cout << "Knight!" << endl;
+//    }
+//
+//    virtual void Attack() final     // final = Override 금지
+//    {
+//        cout << "Knight!" << endl;
+//    }
+//
+//    // 오버로딩 (Overloading): 함수 이름 재사용
+//
+//private:
+//    int _stamina = 100;
+//};
+
+#pragma endregion
+
+#pragma region 오른값 참조 (rvalue reference)
+
+// 왼값(lvalue) vs 오른값(rvalue)
+// - lvalue: 단일식을 넘어서 계속 지속되는 개체
+// - rvalue: lvalue가 아닌 나머지 (임시 값, 열거형, 람다, i++ 등)
+
+class Pet
 {
-public:
-    virtual void Attack()
-    {
-        cout << "Creature!" << endl;
-    }
+
 };
 
-class Player : public Creature
+class Knight
 {
 public:
-    // 오버라이드 (Override): 함수 재정의
-    virtual void Attack() override
+    Knight()
     {
-        cout << "Player!" << endl;
+        cout << "Knight()" << endl;
     }
-};
 
-class Knight : public Player
-{
+    // 복사 생성자
+    Knight(const Knight& knight)
+    {
+        cout << "Knight(const Knight&)" << endl;
+    }
+
+    virtual ~Knight()
+    {
+        if (_pet)
+        {
+            delete _pet;
+        }
+    }
+
+    // 이동 생성자
+    Knight(Knight&& knight) noexcept
+    {
+        cout << "Knight(Knight&&)" << endl;
+
+    }
+
+    // 복사 대입 연산자
+    void operator=(const Knight& knight)
+    {
+        cout << "operator=(const Knight&)" << endl;
+
+        _hp = knight._hp;
+
+        // 깊은 복사
+        if (knight._pet)
+        {
+            _pet = new Pet(*knight._pet);
+        }
+    }
+
+    // 이동 대입 연산자
+    void operator=(Knight&& knight) noexcept
+    {
+        cout << "operator=(Knight&& knight)" << endl;
+
+        // 얕은 복사
+        _hp = knight._hp;
+        _pet = knight._pet;
+
+        knight._pet = nullptr;
+    }
+
 public:
-    // 오버라이드 (Override): 함수 재정의
-    virtual void Attack() const     // const = readonly 함수로 만들어줌
+    void PrintInfo() const
     {
-        cout << "Knight!" << endl;
+        cout << "hp: " << _hp << endl;
     }
 
-    virtual void Attack() final     // final = Override 금지
-    {
-        cout << "Knight!" << endl;
-    }
-
-    // 오버로딩 (Overloading): 함수 이름 재사용
-
-private:
-    int _stamina = 100;
+public:
+    int _hp = 100;
+    Pet* _pet = nullptr;
 };
+
+
+void TestKnight_Copy(Knight knight)
+{
+    knight._hp = 200;
+}
+
+void TestKnight_LValueRef(Knight& knight)
+{
+    knight._hp = 200;
+}
+
+void TestKnight_ConstLValueRef(const Knight& knight)
+{
+    knight.PrintInfo();
+}
+
+void TestKnight_RValueRef(Knight&& knight)      // 이동 대상
+{
+    // 원본을 유지하지 않아도 된다는 힌트
+
+}
 
 #pragma endregion
 
@@ -4992,8 +5093,35 @@ int main()
 
 #pragma region override, final
 
-    Player* player = new Knight();
-    player->Attack();
+    /*Player* player = new Knight();
+    player->Attack();*/
+
+#pragma endregion
+
+#pragma region 오른값 참조 (rvalue reference)
+
+    //int a = 3;
+
+    Knight k1;
+    TestKnight_Copy(k1);
+    TestKnight_LValueRef(k1);
+    TestKnight_ConstLValueRef(Knight());
+    TestKnight_RValueRef(Knight());
+    TestKnight_RValueRef(static_cast<Knight&&>(k1));
+
+    Knight k2;
+    k2._pet = new Pet();
+    k2._hp = 1000;
+
+    // &&는 원본은 날려도 된다는 힌트를 준다
+    Knight k3;
+    //k3 = static_cast<Knight&&>(k2);
+
+    k3 = std::move(k2);     // 오른값 참조로 캐스팅
+    // std::move의 본래 이름 후보 중 하나가 ravlue_cast
+
+    std::unique_ptr<Knight> uptr = std::make_unique<Knight>();
+    std::unique_ptr<Knight> uptr2 = std::move(uptr);
 
 #pragma endregion
 
