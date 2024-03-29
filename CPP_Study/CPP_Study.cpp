@@ -2968,46 +2968,182 @@ using namespace std;
 
 // && -> 오른값 참조
 
+//class Knight
+//{
+//public:
+//    Knight()
+//    {
+//        cout << "기본 생성자" << endl;
+//    }
+//
+//    Knight(const Knight& knight)
+//    {
+//        cout << "복사 생성자" << endl;
+//    }
+//
+//    Knight(Knight&& knight) noexcept
+//    {
+//        cout << "이동 생성자" << endl;
+//    }
+//};
+//
+//void Test_RValueRef(Knight&& knight)
+//{
+//
+//}
+//
+//void Test_Copy(Knight k)
+//{
+//
+//}
+//
+//template<typename T>
+//void Test_ForwardingRef(T&& param)  // 전달 참조: 왼값 or 오른값 중 하나를 받아줌
+//{
+//    // 왼값 참조라면 복사
+//    //Test_Copy(param);
+//
+//    // 오른값 참조라면 이동
+//    //Test_Copy(std::move(param));
+//
+//    Test_Copy(std::forward<T>(param));
+//}
+
+#pragma endregion
+
+#pragma region 람다 (lamda)
+
+#include <vector>
+
+// 함수 객체를 빠르게 만드는 문법
+
+//enum class ItemType
+//{
+//    None,
+//    Armor,
+//    Weapon,
+//    Jewerly,
+//    Consumable,
+//};
+//
+//enum class Rarity
+//{
+//    Common,
+//    Rare,
+//    Unique,
+//};
+//
+//class Item
+//{
+//public:
+//    Item() {}
+//    Item(int itemId, Rarity rarity, ItemType type) : _itemId(itemId), _rarity(rarity), _type(type)
+//    {
+//
+//    }
+//
+//public:
+//    int _itemId = 0;
+//    Rarity _rarity = Rarity::Common;
+//    ItemType _type = ItemType::None;
+//};
+
+#pragma endregion
+
+#pragma region 스마트 포인터
+
 class Knight
 {
 public:
     Knight()
     {
-        cout << "기본 생성자" << endl;
+        cout << "Knight 생성" << endl;
     }
 
-    Knight(const Knight& knight)
+    virtual ~Knight()
     {
-        cout << "복사 생성자" << endl;
+        cout << "Knight 소멸" << endl;
     }
 
-    Knight(Knight&& knight) noexcept
+    void Attack()
     {
-        cout << "이동 생성자" << endl;
+        if (_target.expired() == false)
+        {
+            shared_ptr<Knight> sptr = _target.lock();
+            sptr->_hp -= _damage;
+            cout << "HP: " << sptr->_hp << endl;
+        }
     }
+
+public:
+    int _hp = 100;
+    int _damage = 10;
+    weak_ptr<Knight> _target;
 };
 
-void Test_RValueRef(Knight&& knight)
+class RefCountBlock
 {
 
-}
-
-void Test_Copy(Knight k)
-{
-
-}
+public:
+    int _refCount = 1;
+    int _weakCount = 1;
+};
 
 template<typename T>
-void Test_ForwardingRef(T&& param)  // 전달 참조: 왼값 or 오른값 중 하나를 받아줌
+class SharedPtr
 {
-    // 왼값 참조라면 복사
-    //Test_Copy(param);
+public:
+    SharedPtr() {};
+    SharedPtr(T* ptr) : _ptr(ptr)
+    {
+        if (_ptr)
+        {
+            _block = new RefCountBlock();
+            cout << "RefCount: " << _block->_refCount << endl;
+        }
+    }
 
-    // 오른값 참조라면 이동
-    //Test_Copy(std::move(param));
+    SharedPtr(const SharedPtr& sptr) : _ptr(sptr._ptr), _block(sptr._block)
+    {
+        if (_ptr)
+        {
+            _block->_refCount++;
+            cout << "RefCount: " << _block->_refCount << endl;
+        }
+    }
 
-    Test_Copy(std::forward<T>(param));
-}
+    virtual ~SharedPtr()
+    {
+        if (_ptr)
+        {
+            _block->_refCount--;
+            cout << "RefCount: " << _block->_refCount << endl;
+
+            if (_block->_refCount == 0)
+            {
+                delete _ptr;
+                delete _block;
+                cout << "Delete Data" << endl;
+            }
+        }
+    }
+
+public:
+    void operator=(const SharedPtr& sptr)
+    {
+        _ptr = sptr._ptr;
+        _block = sptr._block;
+        if (_ptr)
+        {
+            _block->_refCount++;
+            cout << "RefCount: " << _block->_refCount << endl;
+        }
+    }
+
+public:
+    T* _ptr = nullptr;
+    RefCountBlock* _block = nullptr;
+};
 
 #pragma endregion
 
@@ -5177,30 +5313,175 @@ int main()
 
 #pragma region 전달 참조 (forward*ing reference)
 
-    Knight k1;
+    //Knight k1;
 
-    Test_RValueRef(std::move(k1));
+    //Test_RValueRef(std::move(k1));
 
-    Test_ForwardingRef(k1);
-    Test_ForwardingRef(std::move(k1));
+    //Test_ForwardingRef(k1);
+    //Test_ForwardingRef(std::move(k1));
 
-    auto&& k2 = k1;
-    auto&& k3 = std::move(k1);
+    //auto&& k2 = k1;
+    //auto&& k3 = std::move(k1);
 
-    // 전달 참조를 구별하는 방법
-    // 공통점: 형식 연혁(Type Deduction)이 일어날 때
+    //// 전달 참조를 구별하는 방법
+    //// 공통점: 형식 연혁(Type Deduction)이 일어날 때
 
-    // ---------------------------------------------------
+    //// ---------------------------------------------------
 
-    Knight& k4 = k1;                // 왼값 참조
-    Knight&& k5 = std::move(k1);    // 오른값 참조
+    //Knight& k4 = k1;                // 왼값 참조
+    //Knight&& k5 = std::move(k1);    // 오른값 참조
 
-    // 오른값: 왼값이 아닌 값 = 단일식에서 벗어나면 사용 x
-    // 오른값 참조: 오른값만 참조할 수 있는 참조 타입
-    //Test_RValueRef(std::move(k5));
+    //// 오른값: 왼값이 아닌 값 = 단일식에서 벗어나면 사용 x
+    //// 오른값 참조: 오른값만 참조할 수 있는 참조 타입
+    ////Test_RValueRef(std::move(k5));
 
-    Test_ForwardingRef(k1);
-    Test_ForwardingRef(std::move(k1));
+    //Test_ForwardingRef(k1);
+    //Test_ForwardingRef(std::move(k1));
+
+#pragma endregion
+
+#pragma region 람다 (lamda)
+
+    //vector<Item> v;
+    //v.push_back(Item(1, Rarity::Common, ItemType::Weapon));
+    //v.push_back(Item(2, Rarity::Common, ItemType::Armor));
+    //v.push_back(Item(3, Rarity::Rare, ItemType::Jewerly));
+    //v.push_back(Item(4, Rarity::Unique, ItemType::Weapon));
+
+    //// 람다 = 함수 객체를 손쉽게 만드는 문법
+    //// 람다 자체로 C++11에 새로운 기능이 들어간 것은 아니다
+    //{
+    //    struct FindItemByItemId
+    //    {
+    //        FindItemByItemId(int itemId) : _itemId(itemId) {};
+
+    //        bool operator()(const Item& item)
+    //        {
+    //            return item._itemId == _itemId;
+    //        }
+
+    //        int _itemId;
+    //    };
+
+    //    // 람다 표현식(lamda expression)
+    //    // 클로저(closure) = 람다에 의해 만들어진 실행시점 객체
+    //    // [캡처](인자값) { 구현부 };
+    //    auto isUniqueLamda = [](const Item& item)
+    //        {
+    //            // 리턴타입 자동 추론
+    //            return item._rarity == Rarity::Unique;
+    //        };
+
+    //    int itemId = 4;
+    //    Rarity rarity = Rarity::Unique;
+    //    ItemType type = ItemType::Weapon;
+
+    //    // [] 캡처(capture): 함수 객체 내부에 변수를 저장하는 개념과 유사
+    //    // 기본 캡처 모드: 값(복사) 방식[=] / 참조 방식[&]
+    //    // 변수마다 캡처 모드 지정해서 사용 가능: 값 방식[name], 참조 방식[&name]
+    //    auto FindItem = [&itemId, &rarity, type](const Item& item) { return item._itemId == itemId && item._rarity == rarity && item._type == type; };
+
+    //    //itemId = 10;
+
+    //    vector<Item>::iterator findIt = std::find_if(v.begin(), v.end(), [](const Item& item) { return item._rarity == Rarity::Unique; });
+    //    vector<Item>::iterator findIt2 = std::find_if(v.begin(), v.end(), FindItem);
+
+    //    if (findIt2 != v.end())
+    //    {
+    //        cout << "아이템 ID: " << findIt2->_itemId << endl;
+    //    }
+    //}
+
+    //{
+    //    class Knight
+    //    {
+    //    public:
+    //        auto ResetHpJob()
+    //        {
+    //            return [this]()
+    //                {
+    //                    this->_hp = 200;
+    //                };
+    //        }
+    //        
+    //    public:
+    //        int _hp = 100;
+    //    };
+
+    //    Knight* k = new Knight();
+    //    auto job = k->ResetHpJob();
+    //    delete k;
+    //    job();  // 메모리 오염
+    //}
+
+#pragma endregion
+
+#pragma region 스마트 포인터
+
+    /*{
+        Knight* k1 = new Knight();
+        Knight* k2 = new Knight();
+
+        k1->_target = k2;
+
+        delete k2;
+
+        k1->Attack();
+    }*/
+
+    // 스마트 포인터: 포인터를 알맞는 정채겡 따라 관리하는 객체 (포인터를 래핑해서 사용)
+    // shared_ptr, weak_ptr, unique_ptr
+    /*{
+        SharedPtr<Knight> k1;
+        {
+            SharedPtr<Knight> k2(new Knight);
+            k1 = k2;
+        }
+    }*/
+
+    
+    // shared_ptr
+    /*{
+        shared_ptr<Knight> k1 = make_shared<Knight>();
+        {
+            shared_ptr<Knight> k2 = make_shared<Knight>();
+            k1->_target = k2;
+        }
+        k1->Attack();
+    }*/
+
+    // 순환 참조 조심
+    /*{
+        shared_ptr<Knight> k1 = make_shared<Knight>();
+        shared_ptr<Knight> k2 = make_shared<Knight>();
+
+        k1->_target = k2;
+        k2->_target = k1;
+
+        k1->Attack();
+        k1->_target = nullptr;
+        k2->_target = nullptr;
+    }*/
+
+    // weak_ptr
+    /*{
+        shared_ptr<Knight> k1 = make_shared<Knight>();
+
+        {
+            shared_ptr<Knight> k2 = make_shared<Knight>();
+
+            k1->_target = k2;
+            k2->_target = k1;
+        }
+
+        k1->Attack();
+    }*/
+
+    // unique_ptr
+    /*{
+        unique_ptr<Knight> uptr = make_unique<Knight>();
+        unique_ptr<Knight> uptr2 = std::move(uptr);
+    }*/
 
 #pragma endregion
 
